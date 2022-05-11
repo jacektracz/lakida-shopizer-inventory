@@ -28,7 +28,8 @@ import com.salesmanager.shop.model.catalog.product.type.ProductTypeDescription;
 
 public class ProductTypeImport {
 
-	private String FILE_NAME =   "/Users/carlsamson/Documents/dev/workspaces/shopizer-inventory-xls/shopizer-inventory-csv/src/main/resources/types-loader.csv";
+	//private String FILE_NAME =   "/Users/carlsamson/Documents/dev/workspaces/shopizer-inventory-xls/shopizer-inventory-csv/src/main/resources/types-loader.csv";
+	private String FILE_NAME =   "C://lkd//ht//apps_java8_in_action//app//src//shopizer-inventory-csv//src//main//resources//types-loader.csv";
 	private String endPoint = "http://localhost:8080/api/v1/private/products/type?store=";
 	
 	private static final String ADMIN_NAME = "admin@shopizer.com";

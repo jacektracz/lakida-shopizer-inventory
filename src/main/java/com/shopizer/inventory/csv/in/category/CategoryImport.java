@@ -33,7 +33,8 @@ import com.salesmanager.shop.model.catalog.category.PersistableCategory;
 public class CategoryImport {
 	
 	//private String FILE_NAME = "/Users/carlsamson/Documents/dev/workspaces/shopizer-inventoty-xls/shopizer-inventory-csv/src/main/resources/category-loader.csv";
-	private String FILE_NAME =   "/Users/carlsamson/Documents/csti/projects-proposals/rufina/xls/category-loader.csv";
+	//private String FILE_NAME =   "/Users/carlsamson/Documents/csti/projects-proposals/rufina/xls/category-loader.csv";
+	private String FILE_NAME =   "C://lkd//ht//apps_java8_in_action//app//src//shopizer-inventory-csv//src//main//resources//category-loader.csv";	
 	private String endPoint = "http://localhost:8080/api/v1/private/category?store=";
 	
 	private static final String MERCHANT = "DEFAULT";

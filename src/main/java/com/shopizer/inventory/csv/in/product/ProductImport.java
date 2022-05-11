@@ -80,7 +80,9 @@ public class ProductImport {
 	 * Supported languages
 	 * CSV template must contain name_<language> and description<language>
 	 */
-	private String langs[] = {"en","fr"};
+	//private String langs[] = {"en","fr"};
+	
+	private String langs[] = {"en"};
 	
 	private HttpHeaders httpHeader;
 	
@@ -101,7 +103,8 @@ public class ProductImport {
 	/**
 	 * where to find csv							
 	 */
-	private String FILE_NAME = "/Users/carlsamson/Documents/csti/projects-proposals/rufina/xls/rufina-product-import-2.csv";
+	//private String FILE_NAME = "/Users/carlsamson/Documents/csti/projects-proposals/rufina/xls/rufina-product-import-2.csv";
+	private String FILE_NAME =   "C://lkd//ht//apps_java8_in_action//app//src//shopizer-inventory-csv//src//main//resources//product-loader.csv";
 	//private String FILE_NAME = "/Users/carlsamson/Documents/csti/shopizer/Revamp-2.5/Shopizer-demo/products-import.csv";
 	//private String FILE_NAME = "/Users/carlsamson/Documents/csti/projects-proposals/bam/BAM-excel/BAM-import_list_02.csv";
 	//private String FILE_NAME = "/Users/carlsamson/Documents/dev/workspaces/shopizer-tools/tools/src/main/resources/BAM-import.csv";

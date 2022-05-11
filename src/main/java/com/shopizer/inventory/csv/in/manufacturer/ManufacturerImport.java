@@ -28,7 +28,8 @@ import com.salesmanager.shop.model.catalog.manufacturer.PersistableManufacturer;
 public class ManufacturerImport {
 
 
-	private String FILE_NAME =   "/Users/carlsamson/Documents/dev/workspaces/shopizer-inventory-xls/shopizer-inventory-csv/src/main/resources/collection-loader.csv";
+	//private String FILE_NAME =   "/Users/carlsamson/Documents/dev/workspaces/shopizer-inventory-xls/shopizer-inventory-csv/src/main/resources/collection-loader.csv";
+	private String FILE_NAME =   "C://lkd//ht//apps_java8_in_action//app//src//shopizer-inventory-csv//src//main//resources//manufacturer-loader.csv";
 	private String endPoint = "http://localhost:8080/api/v1/private/manufacturer?store=";
 	
 	private static final String ADMIN_NAME = "admin@shopizer.com";
