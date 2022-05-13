@@ -98,13 +98,14 @@ public class ProductImport {
 	/**
 	 * Where to find images
 	 */
-	private String IMAGE_BASE_DIR = "/Users/carlsamson/Documents/csti/projects-proposals/bam/BAM-excel/";
+	//private String IMAGE_BASE_DIR = "/Users/carlsamson/Documents/csti/projects-proposals/bam/BAM-excel/";
+	private String IMAGE_BASE_DIR = "C://lkd//ht//apps_java8_in_action//app//src//shopizer-inventory-csv//src//main//resources//imgs//";
 	
 	/**
 	 * where to find csv							
 	 */
 	//private String FILE_NAME = "/Users/carlsamson/Documents/csti/projects-proposals/rufina/xls/rufina-product-import-2.csv";
-	private String FILE_NAME =   "C://lkd//ht//apps_java8_in_action//app//src//shopizer-inventory-csv//src//main//resources//product-loader.csv";
+	private String FILE_NAME =   "C://lkd//ht//apps_java8_in_action//app//src//shopizer-inventory-csv//src//main//resources//product-loader2.csv";
 	//private String FILE_NAME = "/Users/carlsamson/Documents/csti/shopizer/Revamp-2.5/Shopizer-demo/products-import.csv";
 	//private String FILE_NAME = "/Users/carlsamson/Documents/csti/projects-proposals/bam/BAM-excel/BAM-import_list_02.csv";
 	//private String FILE_NAME = "/Users/carlsamson/Documents/dev/workspaces/shopizer-tools/tools/src/main/resources/BAM-import.csv";
