@@ -45,7 +45,7 @@ public class ProductImport {
 	 */
 
 	private static String getFileName() {
-		int ii = 2;
+		int ii = 1;
 		String sF = "";
 		if(ii == 0) {
 			sF = "C://lkd//ht//apps_java8_in_action//app//src//shopizer-inventory-csv//src//main//resources//product-loader2.csv";
@@ -56,7 +56,12 @@ public class ProductImport {
 		if(ii == 2) {
 			sF = "C://lkd//ht//apps_java8_in_action//app//src//shopizer-inventory-csv//src//main//resources//product-loader.csv";
 		}
-		
+		if(ii == 3) {
+			sF = "C://lkd//ht-shopizer//import//product-loader2.csv";
+		}
+		if(ii == 4) {
+			sF = "C://lkd//ht-shopizer//import//product-loader3.md";
+		}				
 		return sF;
 	}
 
@@ -119,11 +124,18 @@ public class ProductImport {
 			String fileName, String imgBaseDir,
 			String imgExt)
 			throws Exception {
+		
 		String sMethod = "importProducts";
 		loggerDebugM(sMethod, "start");
+		
 		int ii = 0;
 		int count = 0;
 		CSVParser parser = getParser(fileName);
+		if(parser == null) {
+			loggerDebugM(sMethod, "end");
+			return;
+		}
+		
 		for (CSVRecord record : parser) {
 			loggerDebugM(sMethod, "start-record:" + ii);
 
@@ -146,22 +158,24 @@ public class ProductImport {
 		loggerDebugM(sMethod, "start");
 		try {
 			CSVFormat format = CSVFormat.EXCEL.withHeader().withDelimiter(',');
+			loggerDebugM(sMethod, "filename:" + fileName);
 			FileInputStream fis = new FileInputStream(fileName);
 			InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
 			BufferedReader in = new BufferedReader(isr);
 
 			@SuppressWarnings("resource")
-			CSVParser parser = new CSVParser(in, format);
+			CSVParser parser = new CSVParser(in, format);		
 			if(parser == null) {
-				return null;
+				loggerDebugM(sMethod, "parser-is-null-filename:" + fileName);
+				return parser;
 			}
 			
-			if(parser.getRecords() == null) {
-				return null;
+			if(parser.getRecordNumber() == 0) {
+				loggerDebugM(sMethod, "parser-record-number-is-0:" + fileName);				
+				return parser;
 			}
 			
-			int size = parser.getRecords().size();
-			loggerDebugM(sMethod, "end:" + size);	
+			loggerDebugM(sMethod, "end:" + parser.getRecordNumber());	
 			return parser;
 		} catch (Exception ex) {
 			loggerExceptionM(sMethod, "end", ex);
