@@ -34,8 +34,6 @@ public class ProductImport {
 	 * Supported languages CSV template must contain name_<language> and
 	 * description<language>
 	 */
-	// private String langs[] = {"en","fr"};
-
 	private static final String endPoint = "http://localhost:8080/api/v1/private/product?store=";
 
 	private static final String MERCHANT = "DEFAULT";
@@ -46,13 +44,17 @@ public class ProductImport {
 	 * where to find csv
 	 */
 
-	private static String FILE_NAME = "C://lkd//ht//apps_java8_in_action//app//src//shopizer-inventory-csv//src//main//resources//product-loader2.csv";
+	private static String getFileName() {
+		return "C://lkd//ht//apps_java8_in_action//app//src//shopizer-inventory-csv//src//main//resources//product-loader2.csv";
+	}
+
 
 	public static void main(String[] args) {
 
 		ProductImport productsImport = new ProductImport();
 		try {
-			productsImport.importProducts(DRY_RUN, endPoint, MERCHANT, FILE_NAME);
+			String fn = getFileName();
+			productsImport.importProducts(DRY_RUN, endPoint, MERCHANT, fn);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
