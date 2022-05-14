@@ -37,16 +37,10 @@ public class ProductImportService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProductImportService.class);
 
-
 	private String langs[] = { "en" };
 
-	public boolean DRY_RUN = false;
 
-	private String IMAGE_BASE_DIR = "C://lkd//ht//apps_java8_in_action//app//src//shopizer-inventory-csv//src//main//resources//imgs//";
-
-
-
-	public boolean handleRecord(CSVRecord record, PersistableProduct product, int ii) {
+	public boolean handleRecord(CSVRecord record, PersistableProduct product, int ii,String imgBaseDir) {
 		String sMethod = "handleRecord";
 		loggerDebugM(sMethod, "start");
 		try {
@@ -67,7 +61,7 @@ public class ProductImportService {
 
 			pih.handleDimensions(record, product);
 
-			pih.handleImages(record, product);
+			pih.handleImages(record, product,imgBaseDir);
 
 			pih.handleQuantity(record, product);
 
@@ -92,7 +86,7 @@ public class ProductImportService {
 				return false;
 			}
 
-			String barcode = handleBarcode(record, null);
+			String barcode = handleBarcode(record, null,true);
 			if (barcode.equals("")) {
 				return false;
 			}
@@ -140,13 +134,15 @@ public class ProductImportService {
 		String sMethod = "handleDiscount";
 		loggerDebugM(sMethod, "start");
 		try {
-			if (record.isSet("deal")) {
-				String discount = recordGetString(record, "deal");
-				BigDecimal discountedPrice = this.createDiscountedPrice(productPrice, discount);
-				if (discountedPrice != null) {
-					persistableProductPrice.setDiscountedPrice(discountedPrice);
-				}
+			if (!record.isSet("deal")) {
+				return false;
+			}			
+			String discount = recordGetString(record, "deal");
+			BigDecimal discountedPrice = this.createDiscountedPrice(productPrice, discount);
+			if (discountedPrice != null) {
+				persistableProductPrice.setDiscountedPrice(discountedPrice);
 			}
+
 		} catch (Exception ex) {
 			loggerExceptionM(sMethod, "end", ex);
 		}
@@ -163,10 +159,13 @@ public class ProductImportService {
 
 				ProductDescription description = new ProductDescription();
 				String lang = langs[langLenth];
-				if (!record.isSet("pre") || !StringUtils.isBlank(recordGetString(record, "pre-order"))) {
+				if (!record.isSet("pre")) {
 					// something specific must be written ?
 				}
-
+				String strPreOrder = recordGetString(record, "pre-order");
+				if (!StringUtils.isBlank(strPreOrder)) {
+					// something specific must be written ?
+				}
 				description = new ProductDescription();
 				description.setLanguage(lang);
 				description.setTitle(cleanup(recordGetString(record, "name_" + lang)));
@@ -188,7 +187,7 @@ public class ProductImportService {
 		return true;
 	}
 
-	private String handleBarcode(CSVRecord record, PersistableProduct product) {
+	private String handleBarcode(CSVRecord record, PersistableProduct product,boolean simple) {
 		String sMethod = "handleBarcode";
 		loggerDebugM(sMethod, "start");
 		try {
@@ -197,16 +196,24 @@ public class ProductImportService {
 				return "";
 			}
 			barcode = recordGetString(record, "barcode");
-			int i = 0;
-			if (!StringUtils.isBlank(barcode)) {
-				barcode = this.alternativeIdentifier(record);
-				if (StringUtils.isBlank(barcode)) {
-					loggerDebug("Skipping barcode " + i);
-					i++;
-					return "";
-				}
+			
+			if (StringUtils.isBlank(barcode)) {
+				return "";
 			}
-
+			
+			
+			if(simple) {
+				loggerDebugM(sMethod, "end:" + barcode);
+				return barcode;
+			}
+			
+			barcode = this.alternativeIdentifier(record);
+			if (StringUtils.isBlank(barcode)) {
+				loggerDebug("Skipping barcode " );
+				return "";
+			}
+			
+			loggerDebugM(sMethod, "end:" + barcode);
 			return barcode;
 		} catch (Exception ex) {
 			loggerExceptionM(sMethod, "end", ex);
@@ -221,7 +228,8 @@ public class ProductImportService {
 		try {
 			String code = recordGetString(record, "sku");
 			product.setSku(code);
-			String barcode = handleBarcode(record, product);
+			boolean simple = true;
+			String barcode = handleBarcode(record, product,simple);
 			product.setRefSku(barcode);
 			product.setProductSpecifications(specs);
 
@@ -322,27 +330,28 @@ public class ProductImportService {
 			}
 			String dimensionsOptions = recordGetString(record, "dimensions");
 
-			if (!StringUtils.isBlank(dimensionsOptions)) {
-				PersistableProductOption opt = new PersistableProductOption();
-				opt.setCode("size");
-				List<String> dims = getTokensWithCollection(dimensionsOptions, ":");
-				List<PersistableProductAttribute> attributes = new ArrayList<PersistableProductAttribute>();
-				dims.stream().forEach(s -> {
-					PersistableProductAttribute attr = new PersistableProductAttribute();
-					attr.setOption(opt);
-					PersistableProductOptionValue optValue = new PersistableProductOptionValue();
-					optValue.setCode(s);
-
-					attr.setOptionValue(optValue);
-
-					attributes.add(attr);
-				});
-				product.setAttributes(attributes);
-
+			if (StringUtils.isBlank(dimensionsOptions)) {
+				return false;
 			}
+			PersistableProductOption opt = new PersistableProductOption();
+			opt.setCode("size");
+			List<String> dims = getTokensWithCollection(dimensionsOptions, ":");
+			List<PersistableProductAttribute> attributes = new ArrayList<PersistableProductAttribute>();
+			dims.stream().forEach(s -> {
+				PersistableProductAttribute attr = new PersistableProductAttribute();
+				attr.setOption(opt);
+				PersistableProductOptionValue optValue = new PersistableProductOptionValue();
+				optValue.setCode(s);
+
+				attr.setOptionValue(optValue);
+
+				attributes.add(attr);
+			});
+			product.setAttributes(attributes);
 
 		} catch (Exception ex) {
 			loggerExceptionM(sMethod, "end", ex);
+			return false;
 		}
 		loggerDebugM(sMethod, "end");
 		return true;
@@ -383,12 +392,14 @@ public class ProductImportService {
 
 			persistableProductPrice.setOriginalPrice(productPrice);
 
-			if (record.isSet("deal")) {
-				String discount = recordGetString(record, "deal");
-				BigDecimal discountedPrice = this.createDiscountedPrice(productPrice, discount);
-				if (discountedPrice != null) {
-					persistableProductPrice.setDiscountedPrice(discountedPrice);
-				}
+			if (!record.isSet("deal")) {
+				loggerDebugM(sMethod, "end-1");
+				return false;
+			}
+			String discount = recordGetString(record, "deal");
+			BigDecimal discountedPrice = this.createDiscountedPrice(productPrice, discount);
+			if (discountedPrice != null) {
+				persistableProductPrice.setDiscountedPrice(discountedPrice);
 			}
 
 			List<PersistableProductPrice> productPriceList = new ArrayList<PersistableProductPrice>();
@@ -423,26 +434,29 @@ public class ProductImportService {
 		return true;
 	}
 
-	public boolean handleImages(CSVRecord record, PersistableProduct product) {
+	public boolean handleImages(CSVRecord record, PersistableProduct product,String baseDir) {
 		String sMethod = "handleImages";
 		loggerDebugM(sMethod, "start");
 		try {
 			if (!record.isSet("image_name")) {
+				loggerDebugM(sMethod, "end-2");
 				return false;
 			}
 			String image = recordGetString(record, "image_name");
 			if (StringUtils.isBlank(image)) {
+				loggerDebugM(sMethod, "end-3");
 				return false;
 			}
 
 			StringBuilder imageName = new StringBuilder();
-			imageName.append(IMAGE_BASE_DIR).append(image.trim()).append(".jpg");
+			imageName.append(baseDir).append(image.trim()).append(".jpg");
 
 			File imgPath = new File(imageName.toString());
 
 			byte[] bytes = this.extractBytes2(imgPath);
 
 			if (bytes == null) {
+				loggerDebugM(sMethod, "end-4");
 				return false;
 			}
 
@@ -458,7 +472,7 @@ public class ProductImportService {
 			images.add(persistableImage);
 
 			product.setImages(images);
-
+			loggerDebugM(sMethod, "end");
 		} catch (Exception ex) {
 			loggerExceptionM(sMethod, "end", ex);
 		}

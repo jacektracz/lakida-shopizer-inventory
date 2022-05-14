@@ -48,43 +48,39 @@ public class ProductImport {
 		return "C://lkd//ht//apps_java8_in_action//app//src//shopizer-inventory-csv//src//main//resources//product-loader2.csv";
 	}
 
+	private static String getImgBaseDir() {
+		String IMAGE_BASE_DIR = "C://lkd//ht//apps_java8_in_action//app//src//shopizer-inventory-csv//src//main//resources//imgs//";
+		return IMAGE_BASE_DIR;
+	}
 
 	public static void main(String[] args) {
 
 		ProductImport productsImport = new ProductImport();
 		try {
 			String fn = getFileName();
-			productsImport.importProducts(DRY_RUN, endPoint, MERCHANT, fn);
+			String ibd = getImgBaseDir();
+			productsImport.importProducts(DRY_RUN, endPoint, MERCHANT, fn, ibd);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	public void importProducts(boolean dryRun, String endpoint, String merchant, String fileName) throws Exception {
+	public void importProducts(boolean dryRun, String endpoint, String merchant, String fileName, String imgBaseDir)
+			throws Exception {
 		String sMethod = "importProducts";
 		loggerDebugM(sMethod, "start");
-		ProductImportService pis = new ProductImportService();
-		ProductImportController pic = new ProductImportController();
 		int ii = 0;
 		int count = 0;
 		CSVParser parser = getParser(fileName);
 		for (CSVRecord record : parser) {
 			loggerDebugM(sMethod, "start-record:" + ii);
-			PersistableProduct product = new PersistableProduct();
 
-			boolean recordOk = pis.handleRecord(record, product, ii);
-			if (!recordOk) {
-				continue;
+			boolean isOk = handleCsvRecord(record, ii, dryRun, endpoint, merchant, fileName, imgBaseDir);
+			if (isOk) {
+				count++;
 			}
 
-			debugRecord(record, product, ii);
-
-			pic.sendRecord(record, product, ii, dryRun, endpoint + merchant);
-			boolean isOkCount = handleMaxCount(record, product, ii);
-			if (!isOkCount) {
-				break;
-			}
 			loggerDebugM(sMethod, "end-record:" + ii);
 		}
 
@@ -110,6 +106,41 @@ public class ProductImport {
 		} catch (Exception ex) {
 			loggerExceptionM(sMethod, "end", ex);
 			return null;
+		}
+	}
+
+	public boolean handleCsvRecord(CSVRecord record, int ii, boolean dryRun, String endpoint, String merchant,
+			String fileName, String imgBaseDir) {
+		
+		String sMethod = "handleCsvRecord";
+		loggerDebugM(sMethod, "start");
+		try {
+			ProductImportService pis = new ProductImportService();
+			ProductImportController pic = new ProductImportController();
+
+			loggerDebugM(sMethod, "start-record:" + ii);
+			PersistableProduct product = new PersistableProduct();
+
+			boolean recordOk = pis.handleRecord(record, product, ii, imgBaseDir);
+			if (!recordOk) {
+				loggerDebugM(sMethod, "end-false-record:" + ii);
+				return false;
+			}
+
+			debugRecord(record, product, ii);
+
+			pic.sendRecord(record, product, ii, dryRun, endpoint + merchant);
+			boolean isOkCount = handleMaxCount(record, product, ii);
+			if (!isOkCount) {
+				loggerDebugM(sMethod, "end-false-record:" + ii);
+				return false;
+			}
+			loggerDebugM(sMethod, "end-record:" + ii);
+
+			return true;
+		} catch (Exception ex) {
+			loggerExceptionM(sMethod, "end", ex);
+			return false;
 		}
 	}
 
