@@ -110,7 +110,7 @@ public class ProductImport {
 		String sMethod = "importProducts";
 		loggerDebugM(sMethod, "start");
 
-		ProductImportService productsImport = new ProductImportService();
+		ProductImportImageService productsImport = new ProductImportImageService();
 		try {			
 			String ibd = getImgBaseDir();
 			productsImport.handleCheckImages( ibd,"img_2",IMAGE_EXT);

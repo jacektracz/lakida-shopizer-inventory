@@ -23,7 +23,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.salesmanager.shop.model.catalog.category.Category;
-import com.salesmanager.shop.model.catalog.product.PersistableImage;
 import com.salesmanager.shop.model.catalog.product.PersistableProduct;
 import com.salesmanager.shop.model.catalog.product.PersistableProductPrice;
 import com.salesmanager.shop.model.catalog.product.ProductDescription;
@@ -60,8 +59,9 @@ public class ProductImportService {
 			pih.handleProductData(record, product, specs, ii);
 
 			pih.handleDimensions(record, product);
-
-			pih.handleImages(record, product, imgBaseDir,imgExt);
+			
+			ProductImportImageService piis = new ProductImportImageService();
+			piis.handleImages(record, product, imgBaseDir,imgExt);
 
 			pih.handleQuantity(record, product);
 
@@ -444,90 +444,7 @@ public class ProductImportService {
 		return true;
 	}
 
-	public boolean handleCheckImages( String baseImageDir,String hardcodedImageName,String imgExt) {
-		String sMethod = "handleCheckImages";
-		loggerDebugM(sMethod, "start");
-		try {			
-			
-			String imageName = baseImageDir + hardcodedImageName + "." + imgExt.toLowerCase();
 
-			File imgPath = new File(imageName.toString());
-			if (!imgPath.exists()) {
-				dbgImgNotFound(imgPath);
-				return false;
-			}
-
-			byte[] bytes = this.extractBytes2(imgPath,imgExt);
-			if (bytes == null) {
-				loggerDebugM(sMethod, "end-4-null-img-bytes");
-				return false;
-			}
-
-			logBytes(bytes);			
-			
-		} catch (Exception ex) {
-			loggerExceptionM(sMethod, "end", ex);
-		}
-		loggerDebugM(sMethod, "end");
-		return true;
-	}
-
-	public boolean handleImages(CSVRecord record, PersistableProduct product, String baseImageDir,String imgExt) {
-		String sMethod = "handleImages";
-		loggerDebugM(sMethod, "start");
-		try {
-			if (!recordIsSetBoolean(record, "image_name")) {
-				loggerDebugM(sMethod, "end-2");
-				return false;
-			}
-			String hardcodedImageName = recordGetString(record, "image_name");
-			if (StringUtils.isBlank(hardcodedImageName)) {
-				loggerDebugM(sMethod, "end-3");
-				return false;
-			}
-
-			String imageName = baseImageDir + hardcodedImageName + "." + imgExt.toLowerCase();			
-
-			File imgPath = new File(imageName.toString());
-
-			byte[] bytes = this.extractBytes2(imgPath,imgExt);
-
-			if (bytes == null) {
-				loggerDebugM(sMethod, "end-4-null-img-bytes");
-				return false;
-			}
-
-			logBytes(bytes);
-
-			PersistableImage persistableImage = new PersistableImage();
-			persistableImage.setBytes(bytes);
-			String imgPpathName = imgPath.getName();
-			loggerDebugM(sMethod, "imPpathName:" + imgPpathName);
-			persistableImage.setName(imgPpathName);
-
-			List<PersistableImage> images = new ArrayList<PersistableImage>();
-			images.add(persistableImage);
-
-			product.setImages(images);
-			loggerDebugM(sMethod, "end");
-		} catch (Exception ex) {
-			loggerExceptionM(sMethod, "end", ex);
-		}
-		loggerDebugM(sMethod, "end");
-		return true;
-	}
-
-	private void logBytes(byte[] bytes) {
-		String sMethod = "logBytes";
-		loggerDebugM(sMethod, "start");
-
-		String stx = "";
-		for (byte a : bytes) {
-			stx += a;
-		}
-		loggerDebugM(sMethod, "bytes:" + stx);
-		loggerDebugM(sMethod, "end");
-	}
 
 	private String cleanup(String field) {
 		return field.replaceAll("�", "");
@@ -609,36 +526,7 @@ public class ProductImportService {
 		LOGGER.error(ex.getMessage());
 	}
 
-	public void imageTestWrite() {
-		BufferedImage bImage = null;
-		try {
-			String fullPath = "C:\\lkd\\ht\\apps_shopizer_l\\src\\app\\shopizer\\sm-shop\\";
-			String initialImageName = fullPath + "files/images/img__ini.png";
-			String createdImageName = fullPath + "files/images/img__ini_created.jpg";
-			File initialImage = new File(initialImageName);
-			loggerDebug("test-image-initial-image-exists :" + initialImage.exists());
-
-			bImage = ImageIO.read(initialImage);
-			loggerDebug("test-image-bImage-getHeight :" + bImage.getHeight());
-			loggerDebug("test-image-bImage-getWidth :" + bImage.getWidth());
-			File createdFile = new File(createdImageName);
-			ImageIO.write(bImage, "jpg", createdFile);
-			loggerDebug("test-image-created-path :" + createdFile.getAbsolutePath());
-			loggerDebug("test-image-created-exists :" + createdFile.exists());
-
-			String fullCreatedPath2 = "C:\\lkd\\";
-			String createdImageName2 = fullCreatedPath2 + "files\\images\\img__ini_created.png";
-			File createdFile2 = new File(createdImageName2);
-			ImageIO.write(bImage, "png", createdFile2);
-			loggerDebug("test-image-created2-path :" + createdFile2.getAbsolutePath());
-			loggerDebug("test-image-created2-exists :" + createdFile2.exists());
-
-		} catch (Exception e) {
-			loggerDebug("Exception occured :" + e.getMessage());
-		}
-
-		loggerDebug("Images were written succesfully.");
-	}
+	
 	private void dbgImgNotFound(File imgPath) {
 		String sMethod = "extractBytes2";
 		loggerDebugM(sMethod, "start");
