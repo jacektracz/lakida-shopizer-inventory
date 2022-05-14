@@ -45,7 +45,19 @@ public class ProductImport {
 	 */
 
 	private static String getFileName() {
-		return "C://lkd//ht//apps_java8_in_action//app//src//shopizer-inventory-csv//src//main//resources//product-loader2.csv";
+		int ii = 2;
+		String sF = "";
+		if(ii == 0) {
+			sF = "C://lkd//ht//apps_java8_in_action//app//src//shopizer-inventory-csv//src//main//resources//product-loader2.csv";
+		}
+		if(ii == 1) {
+			sF = "C://lkd//ht//apps_java8_in_action//app//src//shopizer-inventory-csv//src//main//resources//product-loader3.md";
+		}
+		if(ii == 2) {
+			sF = "C://lkd//ht//apps_java8_in_action//app//src//shopizer-inventory-csv//src//main//resources//product-loader.csv";
+		}
+		
+		return sF;
 	}
 
 	private static String getImgBaseDir() {
@@ -59,7 +71,7 @@ public class ProductImport {
 		ProductImport productsImport = new ProductImport();
 		try {
 			
-			int ii = 1;
+			int ii = 0;
 			
 			if(ii == 0) {
 				productsImport.mainImport();
@@ -83,7 +95,7 @@ public class ProductImport {
 			String fn = getFileName();
 			String ibd = getImgBaseDir();
 			ProductImport productsImport = new ProductImport();
-			productsImport.importProducts(DRY_RUN, endPoint, MERCHANT, fn, ibd);
+			productsImport.importProducts(DRY_RUN, endPoint, MERCHANT, fn, ibd,IMAGE_EXT);
 		} catch (Exception ex) {
 			loggerExceptionM(sMethod, "end", ex);
 		}
@@ -96,14 +108,16 @@ public class ProductImport {
 		ProductImportService productsImport = new ProductImportService();
 		try {			
 			String ibd = getImgBaseDir();
-			productsImport.handleCheckImages( ibd,"img_2","PNG");
+			productsImport.handleCheckImages( ibd,"img_2",IMAGE_EXT);
 		} catch (Exception ex) {
 			loggerExceptionM(sMethod, "end", ex);
 		}
 		loggerDebugM(sMethod, "end");
 	}
 
-	public void importProducts(boolean dryRun, String endpoint, String merchant, String fileName, String imgBaseDir)
+	public void importProducts(boolean dryRun, String endpoint, String merchant, 
+			String fileName, String imgBaseDir,
+			String imgExt)
 			throws Exception {
 		String sMethod = "importProducts";
 		loggerDebugM(sMethod, "start");
@@ -113,7 +127,7 @@ public class ProductImport {
 		for (CSVRecord record : parser) {
 			loggerDebugM(sMethod, "start-record:" + ii);
 
-			boolean isOk = handleCsvRecord(record, ii, dryRun, endpoint, merchant, fileName, imgBaseDir);
+			boolean isOk = handleCsvRecord(record, ii, dryRun, endpoint, merchant, fileName, imgBaseDir,imgExt);
 			if (isOk) {
 				count++;
 			}
@@ -138,7 +152,16 @@ public class ProductImport {
 
 			@SuppressWarnings("resource")
 			CSVParser parser = new CSVParser(in, format);
-
+			if(parser == null) {
+				return null;
+			}
+			
+			if(parser.getRecords() == null) {
+				return null;
+			}
+			
+			int size = parser.getRecords().size();
+			loggerDebugM(sMethod, "end:" + size);	
 			return parser;
 		} catch (Exception ex) {
 			loggerExceptionM(sMethod, "end", ex);
@@ -147,7 +170,7 @@ public class ProductImport {
 	}
 
 	public boolean handleCsvRecord(CSVRecord record, int ii, boolean dryRun, String endpoint, String merchant,
-			String fileName, String imgBaseDir) {
+			String fileName, String imgBaseDir, String imgExt) {
 		
 		String sMethod = "handleCsvRecord";
 		loggerDebugM(sMethod, "start");
@@ -158,7 +181,7 @@ public class ProductImport {
 			loggerDebugM(sMethod, "start-record:" + ii);
 			PersistableProduct product = new PersistableProduct();
 
-			boolean recordOk = pis.handleRecord(record, product, ii, imgBaseDir,IMAGE_EXT);
+			boolean recordOk = pis.handleRecord(record, product, ii, imgBaseDir,imgExt);
 			if (!recordOk) {
 				loggerDebugM(sMethod, "end-false-record:" + ii);
 				return false;
