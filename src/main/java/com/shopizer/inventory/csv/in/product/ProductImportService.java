@@ -38,9 +38,9 @@ public class ProductImportService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProductImportService.class);
 
 	private String langs[] = { "en" };
-
-
-	public boolean handleRecord(CSVRecord record, PersistableProduct product, int ii,String imgBaseDir) {
+	
+	
+	public boolean handleRecord(CSVRecord record, PersistableProduct product, int ii, String imgBaseDir,String imgExt) {
 		String sMethod = "handleRecord";
 		loggerDebugM(sMethod, "start");
 		try {
@@ -61,7 +61,7 @@ public class ProductImportService {
 
 			pih.handleDimensions(record, product);
 
-			pih.handleImages(record, product,imgBaseDir);
+			pih.handleImages(record, product, imgBaseDir,imgExt);
 
 			pih.handleQuantity(record, product);
 
@@ -86,7 +86,7 @@ public class ProductImportService {
 				return false;
 			}
 
-			String barcode = handleBarcode(record, null,true);
+			String barcode = handleBarcode(record, null, true);
 			if (barcode.equals("")) {
 				return false;
 			}
@@ -134,9 +134,9 @@ public class ProductImportService {
 		String sMethod = "handleDiscount";
 		loggerDebugM(sMethod, "start");
 		try {
-			if (!record.isSet("deal")) {
+			if (!recordIsSetBoolean(record, "deal")) {
 				return false;
-			}			
+			}
 			String discount = recordGetString(record, "deal");
 			BigDecimal discountedPrice = this.createDiscountedPrice(productPrice, discount);
 			if (discountedPrice != null) {
@@ -159,7 +159,7 @@ public class ProductImportService {
 
 				ProductDescription description = new ProductDescription();
 				String lang = langs[langLenth];
-				if (!record.isSet("pre")) {
+				if (!recordIsSetBoolean(record, "pre")) {
 					// something specific must be written ?
 				}
 				String strPreOrder = recordGetString(record, "pre-order");
@@ -187,32 +187,31 @@ public class ProductImportService {
 		return true;
 	}
 
-	private String handleBarcode(CSVRecord record, PersistableProduct product,boolean simple) {
+	private String handleBarcode(CSVRecord record, PersistableProduct product, boolean simple) {
 		String sMethod = "handleBarcode";
 		loggerDebugM(sMethod, "start");
 		try {
 			String barcode = "";
-			if (!record.isSet("barcode")) {
+			if (!recordIsSetBoolean(record, "barcode")) {
 				return "";
 			}
 			barcode = recordGetString(record, "barcode");
-			
+
 			if (StringUtils.isBlank(barcode)) {
 				return "";
 			}
-			
-			
-			if(simple) {
+
+			if (simple) {
 				loggerDebugM(sMethod, "end:" + barcode);
 				return barcode;
 			}
-			
+
 			barcode = this.alternativeIdentifier(record);
 			if (StringUtils.isBlank(barcode)) {
-				loggerDebug("Skipping barcode " );
+				loggerDebug("Skipping barcode ");
 				return "";
 			}
-			
+
 			loggerDebugM(sMethod, "end:" + barcode);
 			return barcode;
 		} catch (Exception ex) {
@@ -229,7 +228,7 @@ public class ProductImportService {
 			String code = recordGetString(record, "sku");
 			product.setSku(code);
 			boolean simple = true;
-			String barcode = handleBarcode(record, product,simple);
+			String barcode = handleBarcode(record, product, simple);
 			product.setRefSku(barcode);
 			product.setProductSpecifications(specs);
 
@@ -253,7 +252,7 @@ public class ProductImportService {
 			product.setQuantityOrderMinimum(1);// force to 1 minimum when ordering
 			product.setProductShipeable(true);// all items are shipeable
 
-			if (record.isSet("type")) {
+			if (recordIsSetBoolean(record, "type")) {
 				product.setType(recordGetString(record, "type"));
 			}
 
@@ -307,15 +306,26 @@ public class ProductImportService {
 		return true;
 	}
 
+	private boolean recordIsSetBoolean(CSVRecord record, String key) {
+		String sMethod = "recordIsSetBoolean";
+		loggerDebugM(sMethod, "start:" + key);
+
+		if (!record.isSet(key)) {
+			loggerDebugM(sMethod, "end:" + key + ":" + "false");
+			return false;
+		}
+		loggerDebugM(sMethod, "end:" + key + ":" + "true");
+		return true;
+	}
+
 	private String recordGetString(CSVRecord record, String key) {
 		String sMethod = "recordGetString";
 		loggerDebugM(sMethod, "start");
-		String value = "";
 
-		if (!record.isSet(key)) {
+		if (!recordIsSetBoolean(record, key)) {
 			return "";
 		}
-		value = recordGetString(record, key);
+		String value = record.get(key);
 		loggerDebugM(sMethod, "value:" + value);
 		loggerDebugM(sMethod, "end");
 		return value;
@@ -325,7 +335,7 @@ public class ProductImportService {
 		String sMethod = "handleDimensions";
 		loggerDebugM(sMethod, "start");
 		try {
-			if (!record.isSet("dimensions")) {
+			if (!recordIsSetBoolean(record, "dimensions")) {
 				return false;
 			}
 			String dimensionsOptions = recordGetString(record, "dimensions");
@@ -392,7 +402,7 @@ public class ProductImportService {
 
 			persistableProductPrice.setOriginalPrice(productPrice);
 
-			if (!record.isSet("deal")) {
+			if (!recordIsSetBoolean(record, "deal")) {
 				loggerDebugM(sMethod, "end-1");
 				return false;
 			}
@@ -434,29 +444,56 @@ public class ProductImportService {
 		return true;
 	}
 
-	public boolean handleImages(CSVRecord record, PersistableProduct product,String baseDir) {
+	public boolean handleCheckImages( String baseImageDir,String hardcodedImageName,String imgExt) {
+		String sMethod = "handleCheckImages";
+		loggerDebugM(sMethod, "start");
+		try {			
+			
+			String imageName = baseImageDir + hardcodedImageName + "." + imgExt.toLowerCase();
+
+			File imgPath = new File(imageName.toString());
+			if (!imgPath.exists()) {
+				dbgImgNotFound(imgPath);
+				return false;
+			}
+
+			byte[] bytes = this.extractBytes2(imgPath,imgExt);
+			if (bytes == null) {
+				loggerDebugM(sMethod, "end-4-null-img-bytes");
+				return false;
+			}
+
+			logBytes(bytes);			
+			
+		} catch (Exception ex) {
+			loggerExceptionM(sMethod, "end", ex);
+		}
+		loggerDebugM(sMethod, "end");
+		return true;
+	}
+
+	public boolean handleImages(CSVRecord record, PersistableProduct product, String baseImageDir,String imgExt) {
 		String sMethod = "handleImages";
 		loggerDebugM(sMethod, "start");
 		try {
-			if (!record.isSet("image_name")) {
+			if (!recordIsSetBoolean(record, "image_name")) {
 				loggerDebugM(sMethod, "end-2");
 				return false;
 			}
-			String image = recordGetString(record, "image_name");
-			if (StringUtils.isBlank(image)) {
+			String hardcodedImageName = recordGetString(record, "image_name");
+			if (StringUtils.isBlank(hardcodedImageName)) {
 				loggerDebugM(sMethod, "end-3");
 				return false;
 			}
 
-			StringBuilder imageName = new StringBuilder();
-			imageName.append(baseDir).append(image.trim()).append(".jpg");
+			String imageName = baseImageDir + hardcodedImageName + "." + imgExt.toLowerCase();			
 
 			File imgPath = new File(imageName.toString());
 
-			byte[] bytes = this.extractBytes2(imgPath);
+			byte[] bytes = this.extractBytes2(imgPath,imgExt);
 
 			if (bytes == null) {
-				loggerDebugM(sMethod, "end-4");
+				loggerDebugM(sMethod, "end-4-null-img-bytes");
 				return false;
 			}
 
@@ -602,25 +639,38 @@ public class ProductImportService {
 
 		loggerDebug("Images were written succesfully.");
 	}
+	private void dbgImgNotFound(File imgPath) {
+		String sMethod = "extractBytes2";
+		loggerDebugM(sMethod, "start");
+		
+		loggerDebug("--------------------------------------");
+		loggerDebug("IMAGE NOT FOUND " + imgPath.getName());
+		loggerDebug("IMAGE PATH " + imgPath.getAbsolutePath());
+		loggerDebug("--------------------------------------");
+		loggerDebugM(sMethod, "return");
+	
+	}
 
-	public byte[] extractBytes2(File imgPath) throws Exception {
+	public byte[] extractBytes2(File imgPath,String extension) throws Exception {
 		String sMethod = "extractBytes2";
 		loggerDebugM(sMethod, "start");
 		if (!imgPath.exists()) {
-			loggerDebug("--------------------------------------");
-			loggerDebug("IMAGE NOT FOUND " + imgPath.getName());
-			loggerDebug("IMAGE PATH " + imgPath.getAbsolutePath());
-			loggerDebug("--------------------------------------");
-			loggerDebugM(sMethod, "return");
+			dbgImgNotFound(imgPath);
 			return null;
 		}
 
 		try {
+
 			BufferedImage bImage = ImageIO.read(imgPath);
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ImageIO.write(bImage, "jpg", baos);
+			boolean writeOk = ImageIO.write(bImage, extension, baos);
+			if (!writeOk) {
+				loggerDebugM(sMethod, "end-no-image");
+				return null;
+			}
 			byte[] bytes = baos.toByteArray();
 			loggerDebugM(sMethod, "end");
+
 			return bytes;
 		} catch (Exception ex) {
 			loggerExceptionM(sMethod, "exception", ex);

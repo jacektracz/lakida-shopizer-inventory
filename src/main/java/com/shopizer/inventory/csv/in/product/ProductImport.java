@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 import com.salesmanager.shop.model.catalog.product.PersistableProduct;
 
 public class ProductImport {
-
+	private String IMAGE_EXT = "PNG";
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProductImport.class);
 
 	/**
@@ -49,7 +49,8 @@ public class ProductImport {
 	}
 
 	private static String getImgBaseDir() {
-		String IMAGE_BASE_DIR = "C://lkd//ht//apps_java8_in_action//app//src//shopizer-inventory-csv//src//main//resources//imgs//";
+		//String IMAGE_BASE_DIR = "C://lkd//ht//apps_java8_in_action//app//src//shopizer-inventory-csv//src//main//resources//imgs//";
+		String IMAGE_BASE_DIR = "C://lkd//ht-shopizer//imgs//";
 		return IMAGE_BASE_DIR;
 	}
 
@@ -57,13 +58,49 @@ public class ProductImport {
 
 		ProductImport productsImport = new ProductImport();
 		try {
-			String fn = getFileName();
-			String ibd = getImgBaseDir();
-			productsImport.importProducts(DRY_RUN, endPoint, MERCHANT, fn, ibd);
+			
+			int ii = 1;
+			
+			if(ii == 0) {
+				productsImport.mainImport();
+			}
+			
+			if(ii == 1) {			
+				productsImport.mainCheck();
+			}
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public void mainImport() {
+		String sMethod = "mainImport";
+		loggerDebugM(sMethod, "start");
+		try {
+			
+			String fn = getFileName();
+			String ibd = getImgBaseDir();
+			ProductImport productsImport = new ProductImport();
+			productsImport.importProducts(DRY_RUN, endPoint, MERCHANT, fn, ibd);
+		} catch (Exception ex) {
+			loggerExceptionM(sMethod, "end", ex);
+		}
+	}
+	
+	public void mainCheck() {
+		String sMethod = "importProducts";
+		loggerDebugM(sMethod, "start");
+
+		ProductImportService productsImport = new ProductImportService();
+		try {			
+			String ibd = getImgBaseDir();
+			productsImport.handleCheckImages( ibd,"img_2","PNG");
+		} catch (Exception ex) {
+			loggerExceptionM(sMethod, "end", ex);
+		}
+		loggerDebugM(sMethod, "end");
 	}
 
 	public void importProducts(boolean dryRun, String endpoint, String merchant, String fileName, String imgBaseDir)
@@ -121,7 +158,7 @@ public class ProductImport {
 			loggerDebugM(sMethod, "start-record:" + ii);
 			PersistableProduct product = new PersistableProduct();
 
-			boolean recordOk = pis.handleRecord(record, product, ii, imgBaseDir);
+			boolean recordOk = pis.handleRecord(record, product, ii, imgBaseDir,IMAGE_EXT);
 			if (!recordOk) {
 				loggerDebugM(sMethod, "end-false-record:" + ii);
 				return false;
