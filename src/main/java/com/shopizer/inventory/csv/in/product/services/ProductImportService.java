@@ -1,4 +1,4 @@
-package com.shopizer.inventory.csv.in.product;
+package com.shopizer.inventory.csv.in.product.services;
 
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
 
-import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +30,7 @@ import com.salesmanager.shop.model.catalog.product.attribute.PersistableProductA
 import com.salesmanager.shop.model.catalog.product.attribute.PersistableProductOption;
 import com.salesmanager.shop.model.catalog.product.attribute.PersistableProductOptionValue;
 import com.salesmanager.shop.model.catalog.product.attribute.ProductOptionValue;
+import com.shopizer.inventory.csv.in.product.model.ProductRequestMapData;
 
 public class ProductImportService {
 
@@ -39,7 +39,7 @@ public class ProductImportService {
 	private String langs[] = { "en" };
 	
 	
-	public boolean handleRecord(CSVRecord record, PersistableProduct product, int ii, String imgBaseDir,String imgExt) {
+	public boolean handleRecord(ProductRequestMapData record, PersistableProduct product, int ii, String imgBaseDir,String imgExt) {
 		String sMethod = "handleRecord";
 		loggerDebugM(sMethod, "start");
 		try {
@@ -75,7 +75,7 @@ public class ProductImportService {
 		}
 	}
 
-	public boolean handleCheckData(CSVRecord record, PersistableProduct product, int ii) {
+	public boolean handleCheckData(ProductRequestMapData record, PersistableProduct product, int ii) {
 		String sMethod = "handleDiscount";
 		loggerDebugM(sMethod, "start");
 		try {
@@ -129,7 +129,7 @@ public class ProductImportService {
 		}
 	}
 
-	public boolean handleDiscount(CSVRecord record, PersistableProduct product,
+	public boolean handleDiscount(ProductRequestMapData record, PersistableProduct product,
 			PersistableProductPrice persistableProductPrice, BigDecimal productPrice) {
 		String sMethod = "handleDiscount";
 		loggerDebugM(sMethod, "start");
@@ -150,7 +150,7 @@ public class ProductImportService {
 		return true;
 	}
 
-	public boolean handleDescriptions(CSVRecord record, PersistableProduct product) {
+	public boolean handleDescriptions(ProductRequestMapData record, PersistableProduct product) {
 		String sMethod = "handleImages";
 		loggerDebugM(sMethod, "start");
 		try {
@@ -187,7 +187,7 @@ public class ProductImportService {
 		return true;
 	}
 
-	private String handleBarcode(CSVRecord record, PersistableProduct product, boolean simple) {
+	private String handleBarcode(ProductRequestMapData record, PersistableProduct product, boolean simple) {
 		String sMethod = "handleBarcode";
 		loggerDebugM(sMethod, "start");
 		try {
@@ -221,7 +221,7 @@ public class ProductImportService {
 		return "";
 	}
 
-	public boolean handleProductData(CSVRecord record, PersistableProduct product, ProductSpecification specs, int ii) {
+	public boolean handleProductData(ProductRequestMapData record, PersistableProduct product, ProductSpecification specs, int ii) {
 		String sMethod = "handleProductData";
 		loggerDebugM(sMethod, "start");
 		try {
@@ -263,7 +263,7 @@ public class ProductImportService {
 		return true;
 	}
 
-	public boolean handleDimensions(CSVRecord record, PersistableProduct product, ProductSpecification specs) {
+	public boolean handleDimensions(ProductRequestMapData record, PersistableProduct product, ProductSpecification specs) {
 		String sMethod = "handleDimensions";
 		loggerDebugM(sMethod, "start");
 		try {
@@ -289,7 +289,7 @@ public class ProductImportService {
 		return true;
 	}
 
-	public boolean handleCategoryCode(CSVRecord record, PersistableProduct product, int ii) {
+	public boolean handleCategoryCode(ProductRequestMapData record, PersistableProduct product, int ii) {
 		String sMethod = "handleCategoryCode";
 		loggerDebugM(sMethod, "start");
 		try {
@@ -306,32 +306,23 @@ public class ProductImportService {
 		return true;
 	}
 
-	private boolean recordIsSetBoolean(CSVRecord record, String key) {
+	private boolean recordIsSetBoolean(ProductRequestMapData record, String key) {
 		String sMethod = "recordIsSetBoolean";
 		loggerDebugM(sMethod, "start:" + key);
-
-		if (!record.isSet(key)) {
-			loggerDebugM(sMethod, "end:" + key + ":" + "false");
-			return false;
-		}
-		loggerDebugM(sMethod, "end:" + key + ":" + "true");
-		return true;
+		boolean valueret = record.recordIsSetBoolean(key);
+		loggerDebugM(sMethod, "end:" + key + ":" + valueret);
+		return valueret;
 	}
 
-	private String recordGetString(CSVRecord record, String key) {
+	private String recordGetString(ProductRequestMapData record, String key) {
 		String sMethod = "recordGetString";
 		loggerDebugM(sMethod, "start");
-
-		if (!recordIsSetBoolean(record, key)) {
-			return "";
-		}
-		String value = record.get(key);
-		loggerDebugM(sMethod, "value:" + value);
+		String valueret = record.recordGetString(key, "");
 		loggerDebugM(sMethod, "end");
-		return value;
+		return valueret;
 	}
 
-	public boolean handleDimensions(CSVRecord record, PersistableProduct product) {
+	public boolean handleDimensions(ProductRequestMapData record, PersistableProduct product) {
 		String sMethod = "handleDimensions";
 		loggerDebugM(sMethod, "start");
 		try {
@@ -367,7 +358,7 @@ public class ProductImportService {
 		return true;
 	}
 
-	public boolean handleX2(CSVRecord record, PersistableProduct product) {
+	public boolean handleX2(ProductRequestMapData record, PersistableProduct product) {
 		String sMethod = "handleImages";
 		loggerDebugM(sMethod, "start");
 		try {
@@ -378,7 +369,7 @@ public class ProductImportService {
 		return true;
 	}
 
-	public boolean handleX3(CSVRecord record, PersistableProduct product) {
+	public boolean handleX3(ProductRequestMapData record, PersistableProduct product) {
 		String sMethod = "handleImages";
 		loggerDebugM(sMethod, "start");
 		try {
@@ -389,7 +380,7 @@ public class ProductImportService {
 		return true;
 	}
 
-	public boolean handleProductPrice(CSVRecord record, PersistableProduct product) {
+	public boolean handleProductPrice(ProductRequestMapData record, PersistableProduct product) {
 		String sMethod = "handleProductPrice";
 		loggerDebugM(sMethod, "start");
 		try {
@@ -423,7 +414,7 @@ public class ProductImportService {
 		return true;
 	}
 
-	public boolean handleQuantity(CSVRecord record, PersistableProduct product) {
+	public boolean handleQuantity(ProductRequestMapData record, PersistableProduct product) {
 		String sMethod = "handleImages";
 		loggerDebugM(sMethod, "start");
 		try {
@@ -643,7 +634,7 @@ public class ProductImportService {
 		return Integer.parseInt("1");
 	}
 
-	private String alternativeIdentifier(CSVRecord record) {
+	private String alternativeIdentifier(ProductRequestMapData record) {
 		return recordGetString(record, "sku");
 	}
 

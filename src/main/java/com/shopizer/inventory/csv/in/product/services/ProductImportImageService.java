@@ -1,4 +1,4 @@
-package com.shopizer.inventory.csv.in.product;
+package com.shopizer.inventory.csv.in.product.services;
 
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
@@ -32,12 +32,13 @@ import com.salesmanager.shop.model.catalog.product.attribute.PersistableProductA
 import com.salesmanager.shop.model.catalog.product.attribute.PersistableProductOption;
 import com.salesmanager.shop.model.catalog.product.attribute.PersistableProductOptionValue;
 import com.salesmanager.shop.model.catalog.product.attribute.ProductOptionValue;
+import com.shopizer.inventory.csv.in.product.model.ProductRequestMapData;
 
 public class ProductImportImageService {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProductImportImageService.class);
 	
-	public boolean handleImages(CSVRecord record, PersistableProduct product, String baseImageDir,String imgExt) {
+	public boolean handleImages(ProductRequestMapData record, PersistableProduct product, String baseImageDir,String imgExt) {
 		String sMethod = "handleImages";
 		loggerDebugM(sMethod, "start");
 		try {
@@ -189,30 +190,23 @@ public class ProductImportImageService {
 		loggerDebugM(sMethod, "bytes:" + stx);
 		loggerDebugM(sMethod, "end");
 	}
-	private boolean recordIsSetBoolean(CSVRecord record, String key) {
+	
+	private boolean recordIsSetBoolean(ProductRequestMapData record, String key) {
 		String sMethod = "recordIsSetBoolean";
 		loggerDebugM(sMethod, "start:" + key);
-
-		if (!record.isSet(key)) {
-			loggerDebugM(sMethod, "end:" + key + ":" + "false");
-			return false;
-		}
-		loggerDebugM(sMethod, "end:" + key + ":" + "true");
-		return true;
+		boolean valueret = record.recordIsSetBoolean(key);
+		loggerDebugM(sMethod, "end:" + key + ":" + valueret);
+		return valueret;
 	}
 
-	private String recordGetString(CSVRecord record, String key) {
+	private String recordGetString(ProductRequestMapData record, String key) {
 		String sMethod = "recordGetString";
 		loggerDebugM(sMethod, "start");
-
-		if (!recordIsSetBoolean(record, key)) {
-			return "";
-		}
-		String value = record.get(key);
-		loggerDebugM(sMethod, "value:" + value);
+		String valueret = record.recordGetString(key, "");
 		loggerDebugM(sMethod, "end");
-		return value;
+		return valueret;
 	}
+
 	
 	public void imageTestWrite() {
 		BufferedImage bImage = null;

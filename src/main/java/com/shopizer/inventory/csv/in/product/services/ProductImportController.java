@@ -1,4 +1,4 @@
-package com.shopizer.inventory.csv.in.product;
+package com.shopizer.inventory.csv.in.product.services;
 
 import java.nio.charset.Charset;
 
@@ -15,6 +15,7 @@ import org.springframework.security.crypto.codec.Base64;
 import org.springframework.web.client.RestTemplate;
 
 import com.salesmanager.shop.model.catalog.product.PersistableProduct;
+import com.shopizer.inventory.csv.in.product.model.ProductRequestMapData;
 
 
 
@@ -40,7 +41,7 @@ public class ProductImportController {
 		}
 	}
 	
-	public boolean sendRecord(CSVRecord record,PersistableProduct product,int ii,boolean dryRun,String uri) {
+	public boolean sendRecord(ProductRequestMapData record ,PersistableProduct product,int ii,boolean dryRun,String uri) {
 		String sMethod = "sendRecord";
 		loggerDebugM(sMethod, "start");
 		try {

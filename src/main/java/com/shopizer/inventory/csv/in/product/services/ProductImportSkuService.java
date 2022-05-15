@@ -1,4 +1,4 @@
-package com.shopizer.inventory.csv.in.product;
+package com.shopizer.inventory.csv.in.product.services;
 
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
