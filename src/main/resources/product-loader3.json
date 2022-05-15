@@ -1,0 +1,24 @@
+{
+  "productItems" : [ {
+    "barcode" : "194",
+    "sku" : "194",
+    "imageName" : "img_2",
+    "imageFile" : "3",
+    "nameEn" : "194",
+    "descriptionEn" : "194",
+    "quantity" : "6",
+    "manufacturerCollection" : "fabric",
+    "category" : "kobieta",
+    "packageHeight" : "8",
+    "packageWidth" : "9",
+    "packageLength" : "10",
+    "packageWeight" : null,
+    "price" : "12",
+    "deal" : "13",
+    "preOrder" : "14",
+    "dimensions" : "0",
+    "position" : "16",
+    "importStatus" : "17",
+    "dimension" : "18"
+  } ]
+}
