@@ -15,9 +15,9 @@ import com.shopizer.inventory.csv.in.product.model.ProductRequestEntityData;
 import com.shopizer.inventory.csv.in.product.model.ProductsRequestEntityData;
 import com.shopizer.inventory.csv.in.product.services.ProductImport;
 
-public class ProductRequestEntityMapper {
+public class ProductRequestCsv2EntityMapper {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(ProductRequestEntityMapper.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ProductRequestCsv2EntityMapper.class);
 
 	public void getRequestProductsDataFromCsv(CSVParser parser,ProductsRequestEntityData dest) {
 		
@@ -59,6 +59,7 @@ public class ProductRequestEntityMapper {
 		dest.setSku(recordGetString(parser,"sku"));		
 		
 	}
+	
 	
 	private String getDbgClassName() {
 		return "ProductRequestMapper::";

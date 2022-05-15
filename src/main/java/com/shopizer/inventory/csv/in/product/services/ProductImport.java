@@ -1,45 +1,24 @@
 package com.shopizer.inventory.csv.in.product.services;
 
-import java.io.BufferedReader;
 import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.ObjectWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.salesmanager.shop.model.catalog.product.PersistableProduct;
-import com.shopizer.inventory.csv.in.product.mapper.ProductRequesMapMapper;
-import com.shopizer.inventory.csv.in.product.mapper.ProductRequestEntityMapper;
+import com.shopizer.inventory.csv.in.product.mapper.ProductRequesEntity2MapMapper;
+import com.shopizer.inventory.csv.in.product.mapper.ProductRequestCsv2EntityMapper;
 import com.shopizer.inventory.csv.in.product.model.ProductRequestMapData;
 import com.shopizer.inventory.csv.in.product.model.ProductsRequestEntityData;
 import com.shopizer.inventory.csv.in.product.model.ProductsRequestMapData;
 
 public class ProductImport {
-	private String IMAGE_EXT = "PNG";
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProductImport.class);
-
-	/**
-	 * Fields used in xls file with Product mapping
-	 * 
-	 * barcode sku image image_file name_<lang> description_<lang> quantity
-	 * collection category height width length weight price deal -> % discounted
-	 * pre-order dimensions -> CM | IN (centimeters or inches) position -> placement
-	 * in listing page (ordering) import -> yes | no
-	 * 
-	 * NEED JAVA 1.8
-	 */
-
-	/**
-	 * Supported languages CSV template must contain name_<language> and
-	 * description<language>
-	 */
 	private static final String endPoint = "http://localhost:8080/api/v1/private/product?store=";
-
+	
+	private String IMAGE_EXT = "PNG";
 	private static final String MERCHANT = "DEFAULT";
 	private static boolean DRY_RUN = false;
 	private final int MAX_COUNT = 100;
@@ -47,33 +26,21 @@ public class ProductImport {
 	/**
 	 * where to find csv
 	 */
-
-	private static String getFileName() {
-		int ii = 1;
-		String sF = "";
-		if (ii == 0) {
-			sF = "C://lkd//ht//apps_java8_in_action//app//src//shopizer-inventory-csv//src//main//resources//product-loader2.csv";
-		}
-		if (ii == 1) {
-			sF = "C://lkd//ht//apps_java8_in_action//app//src//shopizer-inventory-csv//src//main//resources//product-loader3.md";
-		}
-		if (ii == 2) {
-			sF = "C://lkd//ht//apps_java8_in_action//app//src//shopizer-inventory-csv//src//main//resources//product-loader.csv";
-		}
-		if (ii == 3) {
-			sF = "C://lkd//ht-shopizer//import//product-loader2.csv";
-		}
-		if (ii == 4) {
-			sF = "C://lkd//ht-shopizer//import//product-loader3.md";
-		}
-		return sF;
-	}
 	
-	private static String getDebugFileName() {
+	private static String getDebugJsonFileName() {
 		int ii = 0;
 		String sF = "";
 		if (ii == 0) {
 			sF = "C://lkd//ht//apps_java8_in_action//app//src//shopizer-inventory-csv//src//main//resources//product-loader3.json";
+		}
+		return sF;
+	}
+
+	private static String getImportJsonFileName() {
+		int ii = 0;
+		String sF = "";
+		if (ii == 0) {
+			sF = "C://lkd//ht//apps_java8_in_action//app//src//shopizer-inventory-csv//src//main//resources//product-loader4.json";
 		}
 		return sF;
 	}
@@ -87,17 +54,24 @@ public class ProductImport {
 
 	public static void main(String[] args) {
 
-		ProductImport productsImport = new ProductImport();
+		
 		try {
 
 			int ii = 0;
 
 			if (ii == 0) {
+				ProductImport productsImport = new ProductImport();
 				productsImport.mainImport();
 			}
 
 			if (ii == 1) {
-				productsImport.mainCheck();
+				ProductImport productsImport = new ProductImport();
+				productsImport.imagesDbgCheck();
+			}
+
+			if (ii == 2) {
+				ProductImport productsImport = new ProductImport();
+				productsImport.jsonReadDbgCheck();
 			}
 
 		} catch (Exception e) {
@@ -110,22 +84,36 @@ public class ProductImport {
 		String sMethod = "mainImport";
 		loggerDebugM(sMethod, "start");
 		try {
-
-			String fn = getFileName();
 			String ibd = getImgBaseDir();
 			ProductImport productsImport = new ProductImport();
-			productsImport.importProducts(DRY_RUN, endPoint, MERCHANT, fn, ibd, IMAGE_EXT);
+			String fn = "";
+			productsImport.importProducts(DRY_RUN, endPoint, MERCHANT, fn, ibd, IMAGE_EXT, 1);
 		} catch (Exception ex) {
 			loggerExceptionM(sMethod, "end", ex);
 		}
 	}
-
-	public void mainCheck() {
-		String sMethod = "importProducts";
+	
+	public void jsonReadDbgCheck() {
+		String sMethod = "jsonReadDbgCheck";
 		loggerDebugM(sMethod, "start");
 
-		ProductImportImageService productsImport = new ProductImportImageService();
 		try {
+			String fn = getImportJsonFileName();
+			ProductsRequestEntityData entities = readEntityRecordFromJsonFile(fn);
+			ProductsRequestMapData maps = new ProductsRequestMapData();
+			new ProductRequesEntity2MapMapper().getRequestProductsDataFromEntity(entities, maps);
+		} catch (Exception ex) {
+			loggerExceptionM(sMethod, "end", ex);
+		}
+		loggerDebugM(sMethod, "end");
+	}
+
+	public void imagesDbgCheck() {
+		String sMethod = "imagesDbgCheck";
+		loggerDebugM(sMethod, "start");
+		
+		try {
+			ProductImportImageService productsImport = new ProductImportImageService();
 			String ibd = getImgBaseDir();
 			productsImport.handleCheckImages(ibd, "img_2", IMAGE_EXT);
 		} catch (Exception ex) {
@@ -135,21 +123,21 @@ public class ProductImport {
 	}
 
 	public void importProducts(boolean dryRun, String endpoint, String merchant, String fileName, String imgBaseDir,
-			String imgExt) throws Exception {
+			String imgExt, int importType) throws Exception {
 
 		String sMethod = "importProducts";
 		loggerDebugM(sMethod, "start");
-
-		ProductsRequestMapData data = readProductsMapFromCsv(fileName);
-
-		ProductsRequestEntityData entityData = readProductsEntityDataFromCsv(fileName);
-
-		if (data == null) {
+		String fn = getImportJsonFileName();
+		
+		ProductsRequestEntityData entityData = readEntityRecordFromJsonFile(fn);
+		
+		if (entityData == null) {
 			loggerDebugM(sMethod, "end");
 			return;
-		}
-
-		handleImportProducts(dryRun, endpoint, merchant, fileName, imgBaseDir, imgExt, data);
+		}		
+		ProductsRequestMapData dataMapped = new ProductsRequestMapData();
+		new ProductRequesEntity2MapMapper().getRequestProductsDataFromEntity(entityData, dataMapped);
+		handleImportProducts(dryRun, endpoint, merchant, fileName, imgBaseDir, imgExt, dataMapped);
 
 		loggerDebugM(sMethod, "end");
 	}
@@ -170,7 +158,7 @@ public class ProductImport {
 		for (ProductRequestMapData record : data.getProductItems()) {
 			loggerDebugM(sMethod, "start-record:" + ii);
 
-			boolean isOk = handleCsvRecord(record, ii, dryRun, endpoint, merchant, fileName, imgBaseDir, imgExt);
+			boolean isOk = handleMappedRecord(record, ii, dryRun, endpoint, merchant, fileName, imgBaseDir, imgExt);
 			if (isOk) {
 				count++;
 			}
@@ -184,77 +172,12 @@ public class ProductImport {
 		loggerDebugM(sMethod, "end");
 	}
 
-	public ProductsRequestEntityData readProductsEntityDataFromCsv(String fileName) throws Exception {
 
-		String sMethod = "readProductsEntityDataFromCsv";
-		loggerDebugM(sMethod, "start");
-		try {
-			CSVParser parser = getParser(fileName);
-
-			ProductsRequestEntityData data = new ProductsRequestEntityData();
-			ProductRequestEntityMapper mapper = new ProductRequestEntityMapper();
-			mapper.getRequestProductsDataFromCsv(parser, data);
-			String dbgFileName = getDebugFileName();
-			mapper.debugRecord(data,0, "");
-			mapper.writeRecord(data,0, dbgFileName);
-			loggerDebugM(sMethod, "end");
-			return data;
-			
-		} catch (Exception ex) {
-			loggerExceptionM(sMethod, "end", ex);
-			return null;
-		}
-
-	}
-
-	public ProductsRequestMapData readProductsMapFromCsv(String fileName) throws Exception {
-
-		String sMethod = "readProductsFromCsv";
-		loggerDebugM(sMethod, "start");
-
-		CSVParser parser = getParser(fileName);
-
-		ProductsRequestMapData data = new ProductsRequestMapData();
-		new ProductRequesMapMapper().getRequestProductsDataFromCsv(parser, data);
-		loggerDebugM(sMethod, "end");
-		return data;
-
-	}
-
-	public CSVParser getParser(String fileName) {
-		String sMethod = "getParser";
-		loggerDebugM(sMethod, "start");
-		try {
-			CSVFormat format = CSVFormat.EXCEL.withHeader().withDelimiter(',');
-			loggerDebugM(sMethod, "filename:" + fileName);
-			FileInputStream fis = new FileInputStream(fileName);
-			InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
-			BufferedReader in = new BufferedReader(isr);
-
-			@SuppressWarnings("resource")
-			CSVParser parser = new CSVParser(in, format);
-			if (parser == null) {
-				loggerDebugM(sMethod, "parser-is-null-filename:" + fileName);
-				return parser;
-			}
-
-			if (parser.getRecordNumber() == 0) {
-				loggerDebugM(sMethod, "parser-record-number-is-0:" + fileName);
-				return parser;
-			}
-
-			loggerDebugM(sMethod, "end:" + parser.getRecordNumber());
-			return parser;
-		} catch (Exception ex) {
-			loggerExceptionM(sMethod, "end", ex);
-			return null;
-		}
-	}
-
-	public boolean handleCsvRecord(ProductRequestMapData record, int ii, boolean dryRun, String endpoint,
+	
+	public boolean handleMappedRecord(ProductRequestMapData record, int ii, boolean dryRun, String endpoint,
 			String merchant, String fileName, String imgBaseDir, String imgExt) {
 
-		String sMethod = "handleCsvRecord";
+		String sMethod = "handleMappedRecord";
 		loggerDebugM(sMethod, "start");
 		try {
 			ProductImportService pis = new ProductImportService();
@@ -318,6 +241,24 @@ public class ProductImport {
 		} catch (Exception ex) {
 			loggerExceptionM(sMethod, "end", ex);
 			return false;
+		}
+	}
+
+	public ProductsRequestEntityData readEntityRecordFromJsonFile(String fileName) {
+		String sMethod = "readEntityRecordFromJsonFile";
+		loggerDebugM(sMethod, "start");
+		try {
+			
+			ObjectMapper mapper = new ObjectMapper();
+
+			ProductsRequestEntityData mp = mapper.readValue(new FileInputStream(fileName),
+					ProductsRequestEntityData.class);
+			new ProductRequestCsv2EntityMapper().debugRecord(mp, 0, "");
+			new ProductRequestCsv2EntityMapper().writeRecord(mp, 0, getDebugJsonFileName());
+			return mp;
+		} catch (Exception ex) {
+			loggerExceptionM(sMethod, "end", ex);
+			return null;
 		}
 	}
 

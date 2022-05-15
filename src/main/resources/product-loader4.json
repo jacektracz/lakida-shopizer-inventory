@@ -20,7 +20,8 @@
     "position" : "16",
     "importStatus" : "17",
     "dimension" : "18"
-  }, {
+  },
+  {
     "barcode" : "206",
     "sku" : "206",
     "imageName" : "img_2",
@@ -41,5 +42,5 @@
     "position" : "16",
     "importStatus" : "17",
     "dimension" : "18"
-  } ]
+  }  ]
 }

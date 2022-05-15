@@ -11,9 +11,9 @@ import com.shopizer.inventory.csv.in.product.model.ProductsRequestEntityData;
 import com.shopizer.inventory.csv.in.product.model.ProductsRequestMapData;
 import com.shopizer.inventory.csv.in.product.services.ProductImport;
 
-public class ProductRequesMapMapper {
+public class ProductRequesCsv2MapMapper {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(ProductRequesMapMapper.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ProductRequesCsv2MapMapper.class);
 
 	public void getRequestProductsDataFromCsv(CSVParser parser,ProductsRequestMapData dest) {
 		
@@ -67,6 +67,31 @@ public class ProductRequesMapMapper {
 		loggerDebugM(sMethod, "end:" + key + ":" + "true");
 		return true;
 	}
+	
+	private void getRequestProductsMapDataFromEntity(CSVRecord parser,ProductRequestEntityData dest) {
+		
+		dest.setBarcode(recordGetString(parser,"barcode"));
+		dest.setCategory(recordGetString(parser,"category"));
+		dest.setDeal(recordGetString(parser,"deal"));
+		dest.setDescriptionEn(recordGetString(parser,"description_en"));
+		dest.setDimension(recordGetString(parser,"dimension"));
+		dest.setDimensions(recordGetString(parser,"dimensions"));
+		dest.setImageFile(recordGetString(parser,"image_file"));
+		dest.setImageName(recordGetString(parser,"image_name"));
+		dest.setImportStatus(recordGetString(parser,"import"));
+		dest.setManufacturerCollection(recordGetString(parser,"collection"));
+		dest.setNameEn(recordGetString(parser,"name_en"));
+		dest.setPackageHeight(recordGetString(parser,"package_height"));
+		dest.setPackageLength(recordGetString(parser,"package_length"));
+		dest.setPackageWidth(recordGetString(parser,"package_width"));
+		dest.setPosition(recordGetString(parser,"position"));
+		dest.setPreOrder(recordGetString(parser,"pre-order"));
+		dest.setPrice(recordGetString(parser,"price"));		
+		dest.setQuantity(recordGetString(parser,"quantity"));		
+		dest.setSku(recordGetString(parser,"sku"));		
+		
+	}
+	
 	
 	private boolean recordIsSetBoolean(CSVRecord record, String key) {
 		String sMethod = "recordIsSetBoolean";
