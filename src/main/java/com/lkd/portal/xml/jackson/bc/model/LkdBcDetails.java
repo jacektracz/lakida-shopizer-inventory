@@ -4,18 +4,21 @@ package com.lkd.portal.xml.jackson.bc.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
-@JsonTypeName("detale")
+@JsonTypeName("detaleClazz")
 public  class LkdBcDetails {
 
-	@JsonProperty("weight")
+	@JacksonXmlProperty( isAttribute = true,localName = "weight")
 	protected String weight;
 
-	@JsonProperty("color")
+	@JacksonXmlProperty( isAttribute = true,localName = "color")
 	protected String color;
-	@JsonProperty( "rozmiar")
+	
+	@JacksonXmlProperty( isAttribute = true,localName = "rozmiar")
 	protected String rozmiar;
-	@JsonProperty("onstock")
+	
+	@JacksonXmlProperty( isAttribute = true,localName = "onstock")
 	protected String onstock;
 
 	/**

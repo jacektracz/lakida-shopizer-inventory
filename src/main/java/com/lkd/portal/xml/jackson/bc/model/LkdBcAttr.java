@@ -10,18 +10,20 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 
 @JsonTypeName("attr")
 public  class LkdBcAttr {
+		
+	@JacksonXmlElementWrapper(useWrapping = false, localName="detaleArr")
+	@JsonProperty("detale")
+	protected List<LkdBcDetails> details;
 
-	@JsonProperty(required = false)
-	protected List<LkdBcDetails> detale;
-
-	public List<LkdBcDetails> getDetale() {
-		if (detale == null) {
-			detale = new ArrayList<LkdBcDetails>();
+	public List<LkdBcDetails> getDetails() {
+		if (details == null) {
+			details = new ArrayList<LkdBcDetails>();
 		}
-		return this.detale;
+		return this.details;
 	}
 
 }

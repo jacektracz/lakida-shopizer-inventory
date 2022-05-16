@@ -1,9 +1,14 @@
 package com.lkd.portal.xml.jackson.bc.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlCData;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 
-@JsonTypeName("offers")
+@JsonTypeName(value = "offer")
 public  class LkdBcOffer {
 
 	@JsonProperty(required = false)
@@ -33,16 +38,20 @@ public  class LkdBcOffer {
 	@JsonProperty(required = false)
 	protected String url;
 	
-	@JsonProperty(required = false)
+	@JsonProperty(value="images")
 	protected LkdBcImages images;
+	
+	@JacksonXmlElementWrapper(useWrapping = true, localName="imagesArr")
+	protected List<String> imageArr;
 	
 	@JsonProperty(required = false)
 	protected String manufacturer;
 	
 	@JsonProperty(required = false)
+	@JacksonXmlCData
 	protected String description;
 	
-	@JsonProperty(required = false)
+	@JsonProperty(required = false,value="attr")
 	protected LkdBcAttr attr;
 	
 	@JsonProperty(required = false)

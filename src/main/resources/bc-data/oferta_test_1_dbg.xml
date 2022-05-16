@@ -1,0 +1,42 @@
+<LkdBcOffers>
+  <offers>
+    <offer>
+      <id>376</id>
+      <name/>
+      <category/>
+      <categoryPath/>
+      <erpcode/>
+      <erpean/>
+      <brutto/>
+      <bruttosuggest/>
+      <url/>
+      <manufacturer/>
+      <description/>
+      <connected/>
+      <images/>
+      <attr/>
+    </offer>
+    <offer>
+      <id>375</id>
+      <name/>
+      <category/>
+      <categoryPath/>
+      <erpcode/>
+      <erpean/>
+      <brutto/>
+      <bruttosuggest/>
+      <url/>
+      <manufacturer/>
+      <description/>
+      <connected/>
+      <images>
+        <image>img-1</image>
+        <image>img-2</image>
+        <image>img-3</image>
+      </images>
+      <attr>
+        <detale color="black"/>
+      </attr>
+    </offer>
+  </offers>
+</LkdBcOffers>

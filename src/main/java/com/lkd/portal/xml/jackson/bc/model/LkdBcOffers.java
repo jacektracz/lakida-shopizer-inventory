@@ -11,10 +11,15 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
-@JsonTypeName("offers")
+
+@JacksonXmlRootElement(localName = "LkdBcOffers")
 public class LkdBcOffers {
-
+	
+	
+	@JacksonXmlElementWrapper(useWrapping = true, localName="offers")
 	protected List<LkdBcOffer> offer;
 
 	public List<LkdBcOffer> getOffer() {

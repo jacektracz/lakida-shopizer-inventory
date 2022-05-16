@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<offers>
+  <offer>
+    <id>63765</id>
+    <name>01 Mama Active</name>
+    <category>Biustonosze</category>
+
+    <categoryPath>Mama/Biustonosze</categoryPath>
+    <brutto>52.90</brutto>
+    <bruttosuggest>72.45</bruttosuggest>
+    <url>http://bieliznacentrum.pl/01-Mama-Active.html</url>
+    <images>
+      <image>http://bieliznacentrum.pl/upload/Benefit/MAMAACTIVEBLUE.jpg</image>
+    </images>
+    <manufacturer>Benefit</manufacturer>
+    <description><![CDATA[Nowość dla Mam ceniących aktywność fizyczną i sportowy wygląd. Biustonosz spełnia wszystkie wymogi funkcyjne. Uszyty z atestowanej, wysokogatunkowej bawełny melanżowej. Miseczki wyprofilowane specjalnym krojem i idealnie układającymi się pod biustem fiszbinami, wyposażone zostały w specjalne zapięcie pozwalające swobodnie odpiąć miseczkę jedną ręką.Neonowe dodatki w dwóch wersjach kolorystycznych zaspokajają modowe potrzeby wymagających klientek. 100% bawełna.]]></description>
+    <attr>
+      <detale color="chaber" rozmiar="70C" onstock="4"  />
+      <detale color="chaber" rozmiar="70D" onstock="5"  />
+      <detale color="chaber" rozmiar="70E" onstock="4"  />
+      <detale color="chaber" rozmiar="70F" onstock="4"  />
+      <detale color="chaber" rozmiar="75B" onstock="5"  />
+      <detale color="chaber" rozmiar="75D" onstock="5"  />
+      <detale color="chaber" rozmiar="75E" onstock="5"  />
+      <detale color="chaber" rozmiar="75F" onstock="2"  />
+      <detale color="chaber" rozmiar="80B" onstock="4"  />
+      <detale color="chaber" rozmiar="80C" onstock="5"  />
+      <detale color="chaber" rozmiar="80D" onstock="3"  />
+      <detale color="chaber" rozmiar="80E" onstock="5"  />
+      <detale color="chaber" rozmiar="80F" onstock="5"  />
+      <detale color="chaber" rozmiar="85C" onstock="5"  />
+      <detale color="chaber" rozmiar="85D" onstock="5"  />
+      <detale color="chaber" rozmiar="85E" onstock="5"  />
+      <detale color="chaber" rozmiar="85F" onstock="3"  />
+    </attr>
+    <connected>
+      <id>63830</id>
+    </connected>
+  </offer>
+</offers>
