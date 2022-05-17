@@ -25,7 +25,7 @@ public class LkBcXmlReaderController {
 		int ii = 0;
 		String sF = "";
 		if (ii == 0) {
-			sF = getRootDataDir() + "//bc-data//oferta_test_1_dbg_reader.xml";
+			sF = getRootDataDir() + "//bc-data//oferta_test_2_dbg_reader.xml";
 		}
 		return sF;
 	}
@@ -37,7 +37,7 @@ public class LkBcXmlReaderController {
 			sF = getRootDataDir() + "//bc-data//ofertaxml_short_2018_01_17_3.xml";
 		}
 		if (ii == 1) {
-			sF = getRootDataDir() + "//bc-data//oferta_test_1.xml";
+			sF = getRootDataDir() + "//bc-data//oferta_test_2.xml";
 		}
 		
 		return sF;

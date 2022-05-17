@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LkdBcOffers>
+<offers>
+  <offer>
+    <id>63765</id>
+    <name>01 Mama Active</name>
+    <category>Biustonosze</category>
+
+    <categoryPath>Mama/Biustonosze</categoryPath>
+    <brutto>52.90</brutto>
+    <bruttosuggest>72.45</bruttosuggest>
+    <url>http://bieliznacentrum.pl/01-Mama-Active.html</url>
+    <images>
+      <image>http://bieliznacentrum.pl/upload/Benefit/MAMAACTIVEBLUE.jpg</image>
+    </images>
+    <manufacturer>Benefit</manufacturer>
+    <description><![CDATA[Nowość dla Mam ceniących aktywność fizyczną i sportowy wygląd. Biustonosz spełnia wszystkie wymogi funkcyjne. Uszyty z atestowanej, wysokogatunkowej bawełny melanżowej. Miseczki wyprofilowane specjalnym krojem i idealnie układającymi się pod biustem fiszbinami, wyposażone zostały w specjalne zapięcie pozwalające swobodnie odpiąć miseczkę jedną ręką.Neonowe dodatki w dwóch wersjach kolorystycznych zaspokajają modowe potrzeby wymagających klientek. 100% bawełna.]]></description>
+    <attr>
+      <detale color="chaber" rozmiar="70C" onstock="4"  />
+      <detale color="chaber" rozmiar="70D" onstock="5"  />
+      <detale color="chaber" rozmiar="70E" onstock="4"  />
+      <detale color="chaber" rozmiar="70F" onstock="4"  />
+      <detale color="chaber" rozmiar="75B" onstock="5"  />
+      <detale color="chaber" rozmiar="75D" onstock="5"  />
+      <detale color="chaber" rozmiar="75E" onstock="5"  />
+      <detale color="chaber" rozmiar="75F" onstock="2"  />
+      <detale color="chaber" rozmiar="80B" onstock="4"  />
+      <detale color="chaber" rozmiar="80C" onstock="5"  />
+      <detale color="chaber" rozmiar="80D" onstock="3"  />
+      <detale color="chaber" rozmiar="80E" onstock="5"  />
+      <detale color="chaber" rozmiar="80F" onstock="5"  />
+      <detale color="chaber" rozmiar="85C" onstock="5"  />
+      <detale color="chaber" rozmiar="85D" onstock="5"  />
+      <detale color="chaber" rozmiar="85E" onstock="5"  />
+      <detale color="chaber" rozmiar="85F" onstock="3"  />
+    </attr>
+    <connected>
+      <id>63830</id>
+    </connected>
+  </offer>
+<offer>
+			<id>63766</id>
+			<name>02 Mama Active</name>
+			<category>Biustonosze</category>
+   
+            <categoryPath>Mama/Biustonosze</categoryPath>
+			<brutto>52.90</brutto> 
+			<bruttosuggest>72.45</bruttosuggest> 
+			<url>http://bieliznacentrum.pl/02-Mama-Active.html</url>
+			<images>
+            	<image>http://bieliznacentrum.pl/upload/Benefit/MAMAACTIVEPINK.jpg</image></images>            
+		    <manufacturer>Benefit</manufacturer>
+			<description><![CDATA[Nowość dla Mam ceniących aktywność fizyczną i sportowy wygląd. Biustonosz spełnia wszystkie wymogi funkcyjne. Uszyty z atestowanej, wysokogatunkowej bawełny melanżowej. Miseczki wyprofilowane specjalnym krojem i idealnie układającymi się pod biustem fiszbinami, wyposażone zostały w specjalne zapięcie pozwalające swobodnie odpiąć miseczkę jedną ręką.Neonowe dodatki w dwóch wersjach kolorystycznych zaspokajają modowe potrzeby wymagających klientek. 100% bawełna.]]></description>
+			<attr><detale color="róż" rozmiar="70C" onstock="5"  /><detale color="róż" rozmiar="70D" onstock="4"  /><detale color="róż" rozmiar="70E" onstock="5"  /><detale color="róż" rozmiar="70F" onstock="3"  /><detale color="róż" rozmiar="75B" onstock="4"  /><detale color="róż" rozmiar="75C" onstock="4"  /><detale color="róż" rozmiar="75D" onstock="5"  /><detale color="róż" rozmiar="75E" onstock="4"  /><detale color="róż" rozmiar="75F" onstock="5"  /><detale color="róż" rozmiar="80B" onstock="5"  /><detale color="róż" rozmiar="80C" onstock="5"  /><detale color="róż" rozmiar="80D" onstock="5"  /><detale color="róż" rozmiar="80E" onstock="5"  /><detale color="róż" rozmiar="80F" onstock="5"  /><detale color="róż" rozmiar="85B" onstock="5"  /><detale color="róż" rozmiar="85C" onstock="5"  /><detale color="róż" rozmiar="85D" onstock="5"  /><detale color="róż" rozmiar="85E" onstock="5"  /><detale color="róż" rozmiar="85F" onstock="5"  /></attr><connected><id>63831</id></connected></offer><offer>
+			<id>63767</id>
+			<name>03 Mama Klasyk Extra</name>
+			<category>Biustonosze</category>
+   
+            <categoryPath>Mama/Biustonosze</categoryPath>
+			<brutto>44.85</brutto> 
+			<bruttosuggest>57.75</bruttosuggest> 
+			<url>http://bieliznacentrum.pl/03-Mama-Klasyk-Extra.html</url>
+			<images>
+            	<image>http://bieliznacentrum.pl/upload/Benefit/MAMACLASSICBIAŁY.jpg</image></images>            
+		    <manufacturer>Benefit</manufacturer>
+			<description><![CDATA[Bawełniany, bardzo komfortowy biustonosz dla Pań karmiących piersią z odpinanymi miseczkami ułatwiającymi karmienie. W całości wykonany z przyjaznej dla skóry dzianiny bawełnianej nie podrażnia wrażliwego biustu. Wygodne zapięcie może być obsługiwane jedna ręką pozostawiając drugą, wolna dla dziecka. 100% bawełna.]]></description>
+			<attr><detale color="biały" rozmiar="75B" onstock="5"  /><detale color="biały" rozmiar="75C" onstock="5"  /><detale color="biały" rozmiar="75D" onstock="5"  /><detale color="biały" rozmiar="75E" onstock="5"  /><detale color="biały" rozmiar="75F" onstock="5"  /><detale color="biały" rozmiar="75H" onstock="5"  /><detale color="biały" rozmiar="75I" onstock="5"  /><detale color="biały" rozmiar="80B" onstock="5"  /><detale color="biały" rozmiar="80C" onstock="5"  /><detale color="biały" rozmiar="80D" onstock="5"  /><detale color="biały" rozmiar="80E" onstock="5"  /><detale color="biały" rozmiar="80F" onstock="5"  /><detale color="biały" rozmiar="80G" onstock="5"  /><detale color="biały" rozmiar="80H" onstock="5"  /><detale color="biały" rozmiar="80I" onstock="5"  /><detale color="biały" rozmiar="85B" onstock="5"  /><detale color="biały" rozmiar="85C" onstock="5"  /><detale color="biały" rozmiar="85D" onstock="5"  /><detale color="biały" rozmiar="85E" onstock="5"  /><detale color="biały" rozmiar="85F" onstock="5"  /><detale color="biały" rozmiar="85H" onstock="5"  /><detale color="biały" rozmiar="85I" onstock="5"  /><detale color="biały" rozmiar="90B" onstock="5"  /><detale color="biały" rozmiar="90C" onstock="5"  /><detale color="biały" rozmiar="90D" onstock="5"  /><detale color="biały" rozmiar="90E" onstock="5"  /><detale color="biały" rozmiar="90F" onstock="5"  /><detale color="biały" rozmiar="90G" onstock="5"  /><detale color="biały" rozmiar="90H" onstock="5"  /><detale color="biały" rozmiar="90I" onstock="5"  /><detale color="biały" rozmiar="95B" onstock="5"  /><detale color="biały" rozmiar="95C" onstock="5"  /><detale color="biały" rozmiar="95D" onstock="5"  /><detale color="biały" rozmiar="95E" onstock="5"  /><detale color="biały" rozmiar="95F" onstock="5"  /><detale color="biały" rozmiar="95G" onstock="5"  /><detale color="biały" rozmiar="95H" onstock="5"  /><detale color="biały" rozmiar="95I" onstock="5"  /></attr></offer>  
+</offers>
+</LkdBcOffers>

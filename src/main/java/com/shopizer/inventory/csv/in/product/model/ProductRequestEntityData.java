@@ -1,5 +1,8 @@
 package com.shopizer.inventory.csv.in.product.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ProductRequestEntityData {
 	
 	private String barcode;
@@ -22,6 +25,7 @@ public class ProductRequestEntityData {
 	private String position;
 	private String importStatus;
 	private String dimension;
+	private List<ProductRequestImageData> images;
 	
 	public String getPackageHeight() {
 		return packageHeight;
@@ -142,5 +146,16 @@ public class ProductRequestEntityData {
 	}
 	public void setCategory(String category) {
 		this.category = category;
+	}
+	
+	public List<ProductRequestImageData> getImages() {
+		if(images == null) {
+			images = new ArrayList<>();
+		}
+		return images;
+	}
+	
+	public void setImages(List<ProductRequestImageData> images) {
+		this.images = images;
 	}
 }
