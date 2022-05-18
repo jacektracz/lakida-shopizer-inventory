@@ -41,7 +41,9 @@ public class ProductImportOptionsByEntityService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProductImportOptionsByEntityService.class);
 
-	public boolean handleOptionsSize(ProductRequestEntityData entityData, PersistableProduct product) {
+	public boolean handleOptionsSize(
+			ProductRequestEntityData entityData, 
+			PersistableProduct product) {
 		String sMethod = "handleOptionsSize";
 		loggerDebugM(sMethod, "start");
 		try {
@@ -58,7 +60,9 @@ public class ProductImportOptionsByEntityService {
 		return true;
 	}
 	
-	public boolean handleOptionsColour(ProductRequestEntityData entityData, PersistableProduct product) {
+	public boolean handleOptionsColour(
+			ProductRequestEntityData entityData, 
+			PersistableProduct product) {
 		String sMethod = "handleOptionsColour";
 		loggerDebugM(sMethod, "start");
 		try {
@@ -93,6 +97,7 @@ public class ProductImportOptionsByEntityService {
 				optValue.setCode(dataItem.getOptionCode());
 				optValue.setName(dataItem.getOptionName());
 				attr.setOptionValue(optValue);
+				//attr.setP(optValue);
 				attributes.add(attr);
 			}
 			
@@ -106,7 +111,9 @@ public class ProductImportOptionsByEntityService {
 		
 	}
 
-	public boolean handleDimensions(ProductRequestMapData record, PersistableProduct product,
+	public boolean handleDimensions(
+			ProductRequestMapData record, 
+			PersistableProduct product,
 			ProductSpecification specs) {
 		String sMethod = "handleDimensions";
 		loggerDebugM(sMethod, "start");
@@ -126,11 +133,13 @@ public class ProductImportOptionsByEntityService {
 			specs.setWidth(convertDimension(recordGetString(record, "package_width"), dimensions));
 			specs.setLength(convertDimension(recordGetString(record, "package_length"), dimensions));
 			specs.setWeight(convertWeight(recordGetString(record, "package_weight")));
+			loggerDebugM(sMethod, "end");
+			return true;
+			
 		} catch (Exception ex) {
 			loggerExceptionM(sMethod, "end", ex);
+			return false;
 		}
-		loggerDebugM(sMethod, "end");
-		return true;
 	}
 
 	

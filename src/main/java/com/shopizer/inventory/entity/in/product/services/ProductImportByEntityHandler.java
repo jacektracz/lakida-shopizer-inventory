@@ -58,7 +58,7 @@ public class ProductImportByEntityHandler {
 
 		try {
 
-			int ii = 2;
+			int ii = 0;
 
 			if (ii == 0) {
 				ProductImportByEntityHandler productsImport = new ProductImportByEntityHandler();
@@ -107,6 +107,7 @@ public class ProductImportByEntityHandler {
 			String ibd = getImgBaseDir();
 			ProductImportByEntityHandler productsImport = new ProductImportByEntityHandler();
 			String fn = getDebugJsonFileName("ld-4");
+			
 			productsImport.importProducts(DRY_RUN, endPoint, MERCHANT, fn, ibd, IMAGE_EXT, 1);
 		} catch (Exception ex) {
 			loggerExceptionM(sMethod, "end", ex);
@@ -149,12 +150,18 @@ public class ProductImportByEntityHandler {
 		loggerDebugM(sMethod, "end");
 	}
 
-	public void importProducts(boolean dryRun, String endpoint, String merchant, String fileName, String imgBaseDir,
-			String imgExt, int importType) throws Exception {
+	public void importProducts(
+			boolean dryRun, 
+			String endpoint, 
+			String merchant, 
+			String fileName, 
+			String imgBaseDir,
+			String imgExt, 
+			int importType) throws Exception {
 
 		String sMethod = "importProducts";
 		loggerDebugM(sMethod, "start");
-		String fn = getImportJsonFileName("4");
+		String fn = fileName;
 		ProductRequestEntityReader entityReader = new ProductRequestEntityReader();
 		ProductsRequestEntityData entityData = entityReader.readEntityRecordFromJsonFile(fn);
 
@@ -162,7 +169,14 @@ public class ProductImportByEntityHandler {
 			loggerDebugM(sMethod, "end");
 			return;
 		}
-		handleImportProducts(dryRun, endpoint, merchant, fileName, imgBaseDir, imgExt, entityData);
+		handleImportProducts(
+				dryRun, 
+				endpoint, 
+				merchant, 
+				fileName, 
+				imgBaseDir, 
+				imgExt, 
+				entityData);
 
 		loggerDebugM(sMethod, "end");
 	}
@@ -204,7 +218,7 @@ public class ProductImportByEntityHandler {
 		loggerDebugM(sMethod, "start");
 		try {
 			ProductImportManagerByEntityService pis = new ProductImportManagerByEntityService();
-			ProductImportByEntityController pic = new ProductImportByEntityController();
+			
 
 			loggerDebugM(sMethod, "start-record:" + ii);
 			PersistableProduct product = new PersistableProduct();
@@ -216,7 +230,8 @@ public class ProductImportByEntityHandler {
 			}
 
 			// debugRecord(record, product, ii);
-
+			
+			ProductImportByEntityController pic = new ProductImportByEntityController();
 			pic.sendRecord(entityData, product, ii, dryRun, endpoint + merchant);
 			boolean isOkCount = handleMaxCount(entityData, product, ii);
 			if (!isOkCount) {

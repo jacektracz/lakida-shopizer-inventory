@@ -19,7 +19,12 @@
     "dimensions" : "0",
     "position" : "16",
     "importStatus" : "17",
-    "dimension" : "18"
+    "dimension" : "18",
+    "productType" : null,
+    "images" : [ ],
+    "options" : null,
+    "sizeOptions" : null,
+    "colourOptions" : null
   }, {
     "barcode" : "206",
     "sku" : "206",
@@ -40,6 +45,11 @@
     "dimensions" : "0",
     "position" : "16",
     "importStatus" : "17",
-    "dimension" : "18"
+    "dimension" : "18",
+    "productType" : null,
+    "images" : [ ],
+    "options" : null,
+    "sizeOptions" : null,
+    "colourOptions" : null
   } ]
 }

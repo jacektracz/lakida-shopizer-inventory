@@ -1,32 +1,32 @@
 {
   "productItems" : [ {
-    "barcode" : "B1",
-    "sku" : "B1",
+    "barcode" : "C1",
+    "sku" : "C1",
     "imageName" : "img_2",
     "imageFile" : "img_2",
-    "nameEn" : null,
-    "descriptionEn" : "cat-1",
-    "quantity" : null,
+    "nameEn" : "name-1",
+    "descriptionEn" : "desc-1",
+    "quantity" : "10",
     "manufacturerCollection" : "fabric",
     "category" : "kobieta",
-    "packageHeight" : null,
-    "packageWidth" : null,
-    "packageLength" : null,
-    "packageWeight" : null,
-    "price" : "22.11",
-    "deal" : "cat-1",
-    "preOrder" : "p1",
-    "dimensions" : "cat-1",
+    "packageHeight" : "8",
+    "packageWidth" : "9",
+    "packageLength" : 12,
+    "packageWeight" : "10",
+    "price" : "221",
+    "deal" : "1",
+    "preOrder" : "1",
+    "dimensions" : "KG",
     "position" : "4",
-    "importStatus" : "cat-1",
-    "dimension" : "cat-1",
-    "productType" : "fabric",
+    "importStatus" : "1",
+    "dimension" : "KG",
+    "productType" : "NOT-SET",
     "images" : [ {
+      "imageName" : "img_1",
+      "imageFile" : "img_1"
+    }, {
       "imageName" : "img_2",
       "imageFile" : "img_2"
-    }, {
-      "imageName" : null,
-      "imageFile" : null
     } ],
     "options" : null,
     "sizeOptions" : {

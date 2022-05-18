@@ -115,8 +115,8 @@ public class ProductRequestEntityProducer {
 			product.getImages().add(img1);
 			
 			ProductRequestImageData img2 = new ProductRequestImageData();
-			img1.setImageFile("img_2");
-			img1.setImageName("img_2");
+			img2.setImageFile("img_2");
+			img2.setImageName("img_2");
 			product.getImages().add(img2);
 			
 			loggerDebugM(sMethod, "end");
@@ -136,15 +136,16 @@ public class ProductRequestEntityProducer {
 			product.setSku("B1");
 			product.setPreOrder("1");
 			product.setCategory("kobieta");
-			product.setDeal("cat-1");
+			product.setDeal("1");
 			product.setDimension("KG");
 			product.setQuantity("10");
 			product.setDimensions("KG");
-			product.setDescriptionEn("cat-1");
+			product.setNameEn("name-1");
+			product.setDescriptionEn("desc-1");
 			product.setImageFile("img_2");
-			product.setPrice("22.11");
+			product.setPrice("221");
 			product.setPosition("4");
-			product.setProductType("fabric");
+			product.setProductType("NOT-SET");
 			product.setImageName("img_2");
 			product.setImportStatus("1");
 			product.setCategory("kobieta");

@@ -15,9 +15,9 @@ public class ProductImportManagerByEntityService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProductImportManagerByEntityService.class);
 
 	private String langs[] = { "en" };
-	
-	
-	public boolean handleRecord(ProductRequestEntityData entityData, PersistableProduct product, int ii, String imgBaseDir,String imgExt) {
+
+	public boolean handleRecord(ProductRequestEntityData entityData, PersistableProduct product, int ii,
+			String imgBaseDir, String imgExt) {
 		String sMethod = "handleRecord";
 		loggerDebugM(sMethod, "start");
 		try {
@@ -26,9 +26,9 @@ public class ProductImportManagerByEntityService {
 			if (!dataOk) {
 				return false;
 			}
-			
+
 			ProductSpecification specs = new ProductSpecification();
-			
+
 			pih.handleQuantity(entityData, product);
 
 			pih.handleProductPrice(entityData, product);
@@ -37,22 +37,26 @@ public class ProductImportManagerByEntityService {
 			pih.handleCategoryCode(entityData, product, ii);
 
 			pih.handleProductData(entityData, product, specs, ii);
-			
-			ProductImportManufacturerByEntityService manufacturerHandler =  new ProductImportManufacturerByEntityService();
+
+			ProductImportManufacturerByEntityService manufacturerHandler = new ProductImportManufacturerByEntityService();
 			manufacturerHandler.handleManufacturer(entityData, product, specs);
-					
-			//ProductImportOptionsByMapService optionsByMapHandler =  new ProductImportOptionsByMapService();
-			//optionsByMapHandler.handleDimensions(record, product);
-			
-			ProductImportOptionDimensionsByEntityService dimesionsHandler =  new ProductImportOptionDimensionsByEntityService();
+
+			// ProductImportOptionsByMapService optionsByMapHandler = new
+			// ProductImportOptionsByMapService();
+			// optionsByMapHandler.handleDimensions(record, product);
+
+			ProductImportOptionDimensionsByEntityService dimesionsHandler = new ProductImportOptionDimensionsByEntityService();
 			dimesionsHandler.handleDimensions(entityData, product, specs);
 			
-			ProductImportOptionsByEntityService optionsHandler =  new ProductImportOptionsByEntityService();
-			optionsHandler.handleOptionsSize(entityData, product);
-			optionsHandler.handleOptionsColour(entityData, product);
+			boolean handleOptions = false;
+			if (handleOptions) {
+				ProductImportOptionsByEntityService optionsHandler = new ProductImportOptionsByEntityService();
+				optionsHandler.handleOptionsSize(entityData, product);
+				optionsHandler.handleOptionsColour(entityData, product);
+			}
 			
 			ProductImportImageByEntityService piis = new ProductImportImageByEntityService();
-			piis.handleImages(entityData, product, imgBaseDir,imgExt);
+			piis.handleImages(entityData, product, imgBaseDir, imgExt);
 
 			return true;
 		} catch (Exception ex) {
@@ -60,7 +64,6 @@ public class ProductImportManagerByEntityService {
 			return false;
 		}
 	}
-
 
 	private String getDbgClassName() {
 		return "ProductFileManagerImpl::";
@@ -81,18 +84,17 @@ public class ProductImportManagerByEntityService {
 		LOGGER.debug(stx);
 		LOGGER.error(ex.getMessage());
 	}
-	
+
 	private void dbgImgNotFound(File imgPath) {
 		String sMethod = "extractBytes2";
 		loggerDebugM(sMethod, "start");
-		
+
 		loggerDebug("--------------------------------------");
 		loggerDebug("IMAGE NOT FOUND " + imgPath.getName());
 		loggerDebug("IMAGE PATH " + imgPath.getAbsolutePath());
 		loggerDebug("--------------------------------------");
 		loggerDebugM(sMethod, "return");
-	
-	}
 
+	}
 
 }

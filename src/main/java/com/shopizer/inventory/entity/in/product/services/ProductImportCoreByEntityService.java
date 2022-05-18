@@ -38,7 +38,13 @@ public class ProductImportCoreByEntityService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProductImportCoreByEntityService.class);
 
-	private String langs[] = { "en" };
+	private List<String> getLangs() {
+		List<String> langs = new ArrayList<>();
+		langs.add("en");
+		langs.add("pl");
+		langs.add("fr" );
+		return langs;
+	}
 
 	public boolean handleCheckData(ProductRequestEntityData record, PersistableProduct product, int ii) {
 		String sMethod = "handleDiscount";
@@ -112,19 +118,18 @@ public class ProductImportCoreByEntityService {
 	}
 
 	public boolean handleDescriptions(ProductRequestEntityData record, PersistableProduct product) {
-		String sMethod = "handleImages";
+		String sMethod = "handleDescriptions";
 		loggerDebugM(sMethod, "start");
 		try {
 			List<ProductDescription> descriptions = new ArrayList<ProductDescription>();
-			for (int langLenth = 0; langLenth < langs.length; langLenth++) {
-
-				ProductDescription description = new ProductDescription();
-				String lang = langs[langLenth];
+			List<String> langs = getLangs();
+			for (String lang : langs) {
+								
 				String strPreOrder = record.getPreOrder();
 				if (!StringUtils.isBlank(strPreOrder)) {
 					// something specific must be written ?
 				}
-				description = new ProductDescription();
+				ProductDescription description = new ProductDescription();
 				description.setLanguage(lang);
 				description.setTitle(cleanup(record.getNameEn()));
 				description.setName(cleanup(record.getNameEn()));
@@ -134,7 +139,6 @@ public class ProductImportCoreByEntityService {
 				}
 				description.setFriendlyUrl(minimalFriendlyUrlCreator(description.getName()));
 				descriptions.add(description);
-
 			}
 			product.setDescriptions(descriptions);
 
@@ -203,7 +207,9 @@ public class ProductImportCoreByEntityService {
 			product.setProductShipeable(true);// all items are shipeable
 
 			String type = record.getProductType();
-			product.setType(type);
+			if (!(StringUtils.isBlank(type)||type.equals("NOT-SET")) ) {
+				product.setType(type);
+			}
 
 		} catch (Exception ex) {
 			loggerExceptionM(sMethod, "end", ex);

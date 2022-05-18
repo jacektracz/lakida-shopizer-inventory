@@ -20,7 +20,7 @@ public class ProductRequestEntityReader {
 		String sMethod = "readEntityRecordFromJsonFile";
 		loggerDebugM(sMethod, "start");
 		try {
-			
+			loggerDebugM(sMethod, "file-name:" + fileName);	
 			ObjectMapper mapper = new ObjectMapper();
 			ProductsRequestEntityData mp = mapper.readValue(new FileInputStream(fileName),
 					ProductsRequestEntityData.class);
