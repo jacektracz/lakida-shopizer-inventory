@@ -42,7 +42,7 @@ public class ProductImportByEntityHandler {
 		int ii = 0;
 		String sF = "";
 		if (ii == 0) {
-			sF = "C://lkd//ht//apps_java8_in_action//app//src//shopizer-inventory-csv//src//main//resources//product-loader" + idx +".json";
+			sF = "C://lkd//ht//apps_java8_in_action//app//src//shopizer-inventory-csv//src//main//resources//product-loader-" + idx +".json";
 		}
 		return sF;
 	}
@@ -58,7 +58,7 @@ public class ProductImportByEntityHandler {
 
 		try {
 
-			int ii = 3;
+			int ii = 2;
 
 			if (ii == 0) {
 				ProductImportByEntityHandler productsImport = new ProductImportByEntityHandler();
@@ -89,14 +89,12 @@ public class ProductImportByEntityHandler {
 		loggerDebugM(sMethod, "start");
 		try {
 			ProductsRequestEntityData products = new ProductsRequestEntityData();
-			ProductRequestEntityData product = new ProductRequestEntityData();
 			ProductRequestEntityProducer producer = new ProductRequestEntityProducer();
-			producer.createRecordMainData(product);
-			products.getProductItems().add(product);
+			producer.createRecord(products);
 			ProductRequestEntityWriter writerHandler =  new ProductRequestEntityWriter();
 			String fn = getDebugJsonFileName("pi-4");
 			writerHandler.writeRecord(products,0, fn);
-			
+			loggerDebugM(sMethod, "end");	
 		} catch (Exception ex) {
 			loggerExceptionM(sMethod, "end", ex);
 		}
@@ -108,7 +106,7 @@ public class ProductImportByEntityHandler {
 		try {
 			String ibd = getImgBaseDir();
 			ProductImportByEntityHandler productsImport = new ProductImportByEntityHandler();
-			String fn = getDebugJsonFileName("mi-4");
+			String fn = getDebugJsonFileName("ld-4");
 			productsImport.importProducts(DRY_RUN, endPoint, MERCHANT, fn, ibd, IMAGE_EXT, 1);
 		} catch (Exception ex) {
 			loggerExceptionM(sMethod, "end", ex);
@@ -120,15 +118,21 @@ public class ProductImportByEntityHandler {
 		loggerDebugM(sMethod, "start");
 
 		try {
-			String fn = getImportJsonFileName("4");
+			String fn = getImportJsonFileName("ld-4");
 			ProductRequestEntityReader entityReader = new ProductRequestEntityReader();
 			ProductsRequestEntityData entities = entityReader.readEntityRecordFromJsonFile(fn);
-			ProductsRequestMapData maps = new ProductsRequestMapData();
-			new ProductRequesEntity2MapMapper().getRequestProductsDataFromEntity(entities, maps);
+			
+			ProductRequestEntityWriter writerHandler =  new ProductRequestEntityWriter();
+			String json = writerHandler.getRecordAsJsonString(entities);
+			loggerDebugM(sMethod, "json:" + json);
+			String fnwrtite = getDebugJsonFileName("test-ld-4");
+			writerHandler.writeRecord(entities,0, fnwrtite);
+			loggerDebugM(sMethod, "end");
+			return;
 		} catch (Exception ex) {
 			loggerExceptionM(sMethod, "end", ex);
-		}
-		loggerDebugM(sMethod, "end");
+			return;
+		}		
 	}
 
 	public void imagesDbgCheck() {

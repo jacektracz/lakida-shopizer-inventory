@@ -37,26 +37,50 @@ public class ProductRequestEntityWriter {
 			return false;
 		}
 	}
+	
 	public boolean writeRecord(ProductsRequestEntityData product,int ii,String outputFile) {
-		String sMethod = "debugRecord";
+		String sMethod = "writeRecord";
 		loggerDebugM(sMethod, "start");
-		String json = "";
-		try {
-			
-			ObjectWriter writer = new ObjectMapper().writer().withDefaultPrettyPrinter();
-			json = writer.writeValueAsString(product);			
-		}catch(Exception ex) {
-			loggerExceptionM(sMethod, "end",ex);
-			return false;
-		}
 		
-		try (PrintWriter out = new PrintWriter(new FileWriter(outputFile))) {
-            out.write(json.toString());
+		String json = getRecordAsJsonString(product);
+		if(json.isEmpty()) {
+			loggerDebugM(sMethod, "end");
+			return false;			
+		}
+		boolean otval = writeJsonStringToFile(json,ii,outputFile);
+		loggerDebugM(sMethod, "end");
+		return otval;
+	}
+	
+	public boolean writeJsonStringToFile(String jsonStr,int ii,String outputFile) {
+		String sMethod = "writeRecord";
+		loggerDebugM(sMethod, "start");
+				
+		try (PrintWriter out = new PrintWriter(new FileWriter(outputFile))) {			
+			loggerDebugM(sMethod, "str-to-write:" + jsonStr);
+            out.write(jsonStr);
+            loggerDebugM(sMethod, "end");
             return true;
         } catch (Exception e) {
         	loggerExceptionM(sMethod, "end",e);
         	return false;
         }
+		
+	}
+
+	public String getRecordAsJsonString(ProductsRequestEntityData product) {
+		String sMethod = "getRecordAsJsonString";
+		loggerDebugM(sMethod, "start");
+		String json = "";
+		try {
+			
+			ObjectWriter writer = new ObjectMapper().writer().withDefaultPrettyPrinter();
+			json = writer.writeValueAsString(product);
+			return json;
+		}catch(Exception ex) {
+			loggerExceptionM(sMethod, "end",ex);
+			return "";
+		}
 		
 	}
 	

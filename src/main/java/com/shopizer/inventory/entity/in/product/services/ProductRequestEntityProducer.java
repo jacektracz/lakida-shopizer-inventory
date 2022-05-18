@@ -28,6 +28,7 @@ public class ProductRequestEntityProducer {
 			createRecordImages(product);
 			createRecordOptionsSize(product);
 			createRecordOptionsColours(product);
+			products.getProductItems().add(product);
 			loggerDebugM(sMethod, "end");
 			return true;
 		}catch(Exception ex) {
@@ -133,17 +134,24 @@ public class ProductRequestEntityProducer {
 			
 			product.setBarcode("B1");
 			product.setSku("B1");
-			product.setPreOrder("p1");
-			product.setCategory("cat-1");
+			product.setPreOrder("1");
+			product.setCategory("kobieta");
 			product.setDeal("cat-1");
-			product.setDimension("cat-1");
-			product.setDimensions("cat-1");
+			product.setDimension("KG");
+			product.setQuantity("10");
+			product.setDimensions("KG");
 			product.setDescriptionEn("cat-1");
 			product.setImageFile("img_2");
+			product.setPrice("22.11");
+			product.setPosition("4");
+			product.setProductType("fabric");
 			product.setImageName("img_2");
-			product.setImportStatus("cat-1");
+			product.setImportStatus("1");
 			product.setCategory("kobieta");
-			product.setManufacturerCollection("estrada");
+			product.setPackageHeight("8");
+			product.setPackageWidth("9");
+			product.setPackageWeight("10");
+			product.setManufacturerCollection("fabric");			
 			loggerDebugM(sMethod, "end");
 			return true;
 		}catch(Exception ex) {

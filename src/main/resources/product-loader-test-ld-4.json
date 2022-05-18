@@ -1,0 +1,69 @@
+{
+  "productItems" : [ {
+    "barcode" : "B1",
+    "sku" : "B1",
+    "imageName" : "img_2",
+    "imageFile" : "img_2",
+    "nameEn" : null,
+    "descriptionEn" : "cat-1",
+    "quantity" : null,
+    "manufacturerCollection" : "fabric",
+    "category" : "kobieta",
+    "packageHeight" : null,
+    "packageWidth" : null,
+    "packageLength" : null,
+    "packageWeight" : null,
+    "price" : "22.11",
+    "deal" : "cat-1",
+    "preOrder" : "p1",
+    "dimensions" : "cat-1",
+    "position" : "4",
+    "importStatus" : "cat-1",
+    "dimension" : "cat-1",
+    "productType" : "fabric",
+    "images" : [ {
+      "imageName" : "img_2",
+      "imageFile" : "img_2"
+    }, {
+      "imageName" : null,
+      "imageFile" : null
+    } ],
+    "options" : null,
+    "sizeOptions" : {
+      "optionType" : "SIZE",
+      "productOptions" : [ {
+        "optionValue" : "XL",
+        "optionQuantity" : "10",
+        "optionSku" : "S7",
+        "optionPrice" : "22.1",
+        "optionCode" : "SIZE",
+        "optionName" : "XL"
+      }, {
+        "optionValue" : "XS",
+        "optionQuantity" : "10",
+        "optionSku" : "S7",
+        "optionPrice" : "22.1",
+        "optionCode" : "SIZE",
+        "optionName" : "XS"
+      } ]
+    },
+    "colourOptions" : {
+      "optionType" : "COLOUR",
+      "productOptions" : [ {
+        "optionValue" : "RD",
+        "optionQuantity" : "10",
+        "optionSku" : "S7",
+        "optionPrice" : "22.1",
+        "optionCode" : "COLOUR",
+        "optionName" : "Red"
+      }, {
+        "optionValue" : "B",
+        "optionQuantity" : "10",
+        "optionSku" : "S7",
+        "optionPrice" : "22.1",
+        "optionCode" : "COLOUR",
+        "optionName" : "Black"
+      } ]
+    }
+  } ]
+}
