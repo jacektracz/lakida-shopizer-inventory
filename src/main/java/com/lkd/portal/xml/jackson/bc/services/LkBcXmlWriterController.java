@@ -9,7 +9,7 @@ import com.lkd.portal.xml.jackson.bc.model.LkdBcDetails;
 import com.lkd.portal.xml.jackson.bc.model.LkdBcImages;
 import com.lkd.portal.xml.jackson.bc.model.LkdBcOffer;
 import com.lkd.portal.xml.jackson.bc.model.LkdBcOffers;
-import com.shopizer.inventory.csv.in.product.services.ProductImport;
+import com.shopizer.inventory.entity.in.product.services.ProductImportByEntityHandler;
 
 public class LkBcXmlWriterController {
 

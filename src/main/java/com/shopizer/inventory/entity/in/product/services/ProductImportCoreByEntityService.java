@@ -1,4 +1,4 @@
-package com.shopizer.inventory.csv.in.product.services;
+package com.shopizer.inventory.entity.in.product.services;
 
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
@@ -16,6 +16,7 @@ import java.util.StringTokenizer;
 import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
+import javax.swing.plaf.basic.BasicTreeUI.NodeDimensionsHandler;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -30,68 +31,27 @@ import com.salesmanager.shop.model.catalog.product.attribute.PersistableProductA
 import com.salesmanager.shop.model.catalog.product.attribute.PersistableProductOption;
 import com.salesmanager.shop.model.catalog.product.attribute.PersistableProductOptionValue;
 import com.salesmanager.shop.model.catalog.product.attribute.ProductOptionValue;
+import com.shopizer.inventory.csv.in.product.model.ProductRequestEntityData;
 import com.shopizer.inventory.csv.in.product.model.ProductRequestMapData;
 
-public class ProductImportService {
+public class ProductImportCoreByEntityService {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ProductImportService.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ProductImportCoreByEntityService.class);
 
 	private String langs[] = { "en" };
-	
-	
-	public boolean handleRecord(ProductRequestMapData record, PersistableProduct product, int ii, String imgBaseDir,String imgExt) {
-		String sMethod = "handleRecord";
-		loggerDebugM(sMethod, "start");
-		try {
 
-			ProductImportService pih = new ProductImportService();
-			boolean dataOk = pih.handleCheckData(record, null, ii);
-			if (!dataOk) {
-				return false;
-			}
-
-			ProductSpecification specs = new ProductSpecification();
-
-			pih.handleCategoryCode(record, product, ii);
-
-			pih.handleDimensions(record, product, specs);
-
-			pih.handleProductData(record, product, specs, ii);
-
-			pih.handleDimensions(record, product);
-			
-			ProductImportImageService piis = new ProductImportImageService();
-			piis.handleImages(record, product, imgBaseDir,imgExt);
-
-			pih.handleQuantity(record, product);
-
-			pih.handleProductPrice(record, product);
-
-			pih.handleDescriptions(record, product);
-			return true;
-		} catch (Exception ex) {
-			loggerExceptionM(sMethod, "end", ex);
-			return false;
-		}
-	}
-
-	public boolean handleCheckData(ProductRequestMapData record, PersistableProduct product, int ii) {
+	public boolean handleCheckData(ProductRequestEntityData record, PersistableProduct product, int ii) {
 		String sMethod = "handleDiscount";
 		loggerDebugM(sMethod, "start");
 		try {
-			String code = recordGetString(record, "sku");
+			String code = record.getSku();
 
 			if (StringUtils.isBlank(code)) {
 				loggerDebug("Skipping code " + ii);
 				return false;
 			}
 
-			String barcode = handleBarcode(record, null, true);
-			if (barcode.equals("")) {
-				return false;
-			}
-
-			String imp = recordGetString(record, "import");
+			String imp = record.getImportStatus();
 			loggerDebug("Import status [" + imp + "]");
 
 			if (StringUtils.isBlank(imp) || "no".equals(imp)) {
@@ -99,10 +59,10 @@ public class ProductImportService {
 				return false;
 			}
 
-			String categoryCode = recordGetString(record, "category");
-			String price = recordGetString(record, "price");
+			String categoryCode = record.getCategory();
+			String price = record.getPrice();
 
-			String orderString = recordGetString(record, "position");
+			String orderString = record.getPosition();
 			if (StringUtils.isBlank(orderString)) {
 				orderString = String.valueOf(ii);
 			}
@@ -129,15 +89,16 @@ public class ProductImportService {
 		}
 	}
 
-	public boolean handleDiscount(ProductRequestMapData record, PersistableProduct product,
+	public boolean handleDiscount(ProductRequestEntityData record, PersistableProduct product,
 			PersistableProductPrice persistableProductPrice, BigDecimal productPrice) {
 		String sMethod = "handleDiscount";
 		loggerDebugM(sMethod, "start");
 		try {
-			if (!recordIsSetBoolean(record, "deal")) {
+			String discount = record.getDeal();
+			if (StringUtils.isBlank(discount)) {
+				loggerDebug("No discount " + discount);
 				return false;
 			}
-			String discount = recordGetString(record, "deal");
 			BigDecimal discountedPrice = this.createDiscountedPrice(productPrice, discount);
 			if (discountedPrice != null) {
 				persistableProductPrice.setDiscountedPrice(discountedPrice);
@@ -150,7 +111,7 @@ public class ProductImportService {
 		return true;
 	}
 
-	public boolean handleDescriptions(ProductRequestMapData record, PersistableProduct product) {
+	public boolean handleDescriptions(ProductRequestEntityData record, PersistableProduct product) {
 		String sMethod = "handleImages";
 		loggerDebugM(sMethod, "start");
 		try {
@@ -159,18 +120,15 @@ public class ProductImportService {
 
 				ProductDescription description = new ProductDescription();
 				String lang = langs[langLenth];
-				if (!recordIsSetBoolean(record, "pre")) {
-					// something specific must be written ?
-				}
-				String strPreOrder = recordGetString(record, "pre-order");
+				String strPreOrder = record.getPreOrder();
 				if (!StringUtils.isBlank(strPreOrder)) {
 					// something specific must be written ?
 				}
 				description = new ProductDescription();
 				description.setLanguage(lang);
-				description.setTitle(cleanup(recordGetString(record, "name_" + lang)));
-				description.setName(cleanup(recordGetString(record, "name_" + lang)));
-				description.setDescription(cleanup(recordGetString(record, "description_" + lang)));
+				description.setTitle(cleanup(record.getNameEn()));
+				description.setName(cleanup(record.getNameEn()));
+				description.setDescription(cleanup(record.getDescriptionEn()));
 				if (StringUtils.isBlank(description.getName())) {
 					description.setName(description.getDescription());
 				}
@@ -187,15 +145,12 @@ public class ProductImportService {
 		return true;
 	}
 
-	private String handleBarcode(ProductRequestMapData record, PersistableProduct product, boolean simple) {
+	private String handleBarcode(ProductRequestEntityData record, PersistableProduct product, boolean simple) {
 		String sMethod = "handleBarcode";
 		loggerDebugM(sMethod, "start");
 		try {
 			String barcode = "";
-			if (!recordIsSetBoolean(record, "barcode")) {
-				return "";
-			}
-			barcode = recordGetString(record, "barcode");
+			barcode = record.getBarcode();
 
 			if (StringUtils.isBlank(barcode)) {
 				return "";
@@ -204,12 +159,6 @@ public class ProductImportService {
 			if (simple) {
 				loggerDebugM(sMethod, "end:" + barcode);
 				return barcode;
-			}
-
-			barcode = this.alternativeIdentifier(record);
-			if (StringUtils.isBlank(barcode)) {
-				loggerDebug("Skipping barcode ");
-				return "";
 			}
 
 			loggerDebugM(sMethod, "end:" + barcode);
@@ -221,11 +170,12 @@ public class ProductImportService {
 		return "";
 	}
 
-	public boolean handleProductData(ProductRequestMapData record, PersistableProduct product, ProductSpecification specs, int ii) {
+	public boolean handleProductData(ProductRequestEntityData record, PersistableProduct product,
+			ProductSpecification specs, int ii) {
 		String sMethod = "handleProductData";
 		loggerDebugM(sMethod, "start");
 		try {
-			String code = recordGetString(record, "sku");
+			String code = record.getSku();
 			product.setSku(code);
 			boolean simple = true;
 			String barcode = handleBarcode(record, product, simple);
@@ -233,14 +183,14 @@ public class ProductImportService {
 			product.setProductSpecifications(specs);
 
 			Category category = new Category();
-			String categoryCode = recordGetString(record, "category");
+			String categoryCode = record.getCategory();
 			category.setCode(categoryCode);
 			List<Category> categories = new ArrayList<Category>();
 			categories.add(category);
 
 			product.setCategories(categories);
 
-			String orderString = recordGetString(record, "position");
+			String orderString = record.getPosition();
 			if (StringUtils.isBlank(orderString)) {
 				orderString = String.valueOf(ii);
 			}
@@ -252,9 +202,8 @@ public class ProductImportService {
 			product.setQuantityOrderMinimum(1);// force to 1 minimum when ordering
 			product.setProductShipeable(true);// all items are shipeable
 
-			if (recordIsSetBoolean(record, "type")) {
-				product.setType(recordGetString(record, "type"));
-			}
+			String type = record.getProductType();
+			product.setType(type);
 
 		} catch (Exception ex) {
 			loggerExceptionM(sMethod, "end", ex);
@@ -263,37 +212,11 @@ public class ProductImportService {
 		return true;
 	}
 
-	public boolean handleDimensions(ProductRequestMapData record, PersistableProduct product, ProductSpecification specs) {
-		String sMethod = "handleDimensions";
-		loggerDebugM(sMethod, "start");
-		try {
-			String manufacturer = recordGetString(record, "collection");// brand - manufacturer ...
-			specs.setManufacturer(manufacturer);
-
-			// sizes are required when loading a product
-			String dimensions = recordGetString(record, "dimension");
-
-			String W = convertDimension(recordGetString(record, "package_width"), dimensions).toString();
-			String L = convertDimension(recordGetString(record, "package_length"), dimensions).toString();
-			String H = convertDimension(recordGetString(record, "package_length"), dimensions).toString();
-			loggerDebugM(sMethod, "W:" + W + " L" + L + " H:" + H);
-
-			specs.setHeight(convertDimension(recordGetString(record, "package_height"), dimensions));
-			specs.setWidth(convertDimension(recordGetString(record, "package_width"), dimensions));
-			specs.setLength(convertDimension(recordGetString(record, "package_length"), dimensions));
-			specs.setWeight(convertWeight(recordGetString(record, "package_weight")));
-		} catch (Exception ex) {
-			loggerExceptionM(sMethod, "end", ex);
-		}
-		loggerDebugM(sMethod, "end");
-		return true;
-	}
-
-	public boolean handleCategoryCode(ProductRequestMapData record, PersistableProduct product, int ii) {
+	public boolean handleCategoryCode(ProductRequestEntityData record, PersistableProduct product, int ii) {
 		String sMethod = "handleCategoryCode";
 		loggerDebugM(sMethod, "start");
 		try {
-			String categoryCode = recordGetString(record, "category");
+			String categoryCode = record.getCategory();
 			Category category = new Category();
 			category.setCode(categoryCode);
 			List<Category> categories = new ArrayList<Category>();
@@ -306,85 +229,12 @@ public class ProductImportService {
 		return true;
 	}
 
-	private boolean recordIsSetBoolean(ProductRequestMapData record, String key) {
-		String sMethod = "recordIsSetBoolean";
-		loggerDebugM(sMethod, "start:" + key);
-		boolean valueret = record.recordIsSetBoolean(key);
-		loggerDebugM(sMethod, "end:" + key + ":" + valueret);
-		return valueret;
-	}
 
-	private String recordGetString(ProductRequestMapData record, String key) {
-		String sMethod = "recordGetString";
-		loggerDebugM(sMethod, "start");
-		String valueret = record.recordGetString(key, "");
-		loggerDebugM(sMethod, "end");
-		return valueret;
-	}
-
-	public boolean handleDimensions(ProductRequestMapData record, PersistableProduct product) {
-		String sMethod = "handleDimensions";
-		loggerDebugM(sMethod, "start");
-		try {
-			if (!recordIsSetBoolean(record, "dimensions")) {
-				return false;
-			}
-			String dimensionsOptions = recordGetString(record, "dimensions");
-
-			if (StringUtils.isBlank(dimensionsOptions)) {
-				return false;
-			}
-			PersistableProductOption opt = new PersistableProductOption();
-			opt.setCode("size");
-			List<String> dims = getTokensWithCollection(dimensionsOptions, ":");
-			List<PersistableProductAttribute> attributes = new ArrayList<PersistableProductAttribute>();
-			dims.stream().forEach(s -> {
-				PersistableProductAttribute attr = new PersistableProductAttribute();
-				attr.setOption(opt);
-				PersistableProductOptionValue optValue = new PersistableProductOptionValue();
-				optValue.setCode(s);
-
-				attr.setOptionValue(optValue);
-
-				attributes.add(attr);
-			});
-			product.setAttributes(attributes);
-
-		} catch (Exception ex) {
-			loggerExceptionM(sMethod, "end", ex);
-			return false;
-		}
-		loggerDebugM(sMethod, "end");
-		return true;
-	}
-
-	public boolean handleX2(ProductRequestMapData record, PersistableProduct product) {
-		String sMethod = "handleImages";
-		loggerDebugM(sMethod, "start");
-		try {
-		} catch (Exception ex) {
-			loggerExceptionM(sMethod, "end", ex);
-		}
-		loggerDebugM(sMethod, "end");
-		return true;
-	}
-
-	public boolean handleX3(ProductRequestMapData record, PersistableProduct product) {
-		String sMethod = "handleImages";
-		loggerDebugM(sMethod, "start");
-		try {
-		} catch (Exception ex) {
-			loggerExceptionM(sMethod, "end", ex);
-		}
-		loggerDebugM(sMethod, "end");
-		return true;
-	}
-
-	public boolean handleProductPrice(ProductRequestMapData record, PersistableProduct product) {
+	public boolean handleProductPrice(ProductRequestEntityData record, PersistableProduct product) {
 		String sMethod = "handleProductPrice";
 		loggerDebugM(sMethod, "start");
 		try {
-			String price = recordGetString(record, "price");
+			String price = record.getPrice();
 			price = price.replaceAll(",", ".").trim();
 			BigDecimal productPrice = new BigDecimal(price);
 
@@ -393,11 +243,8 @@ public class ProductImportService {
 
 			persistableProductPrice.setOriginalPrice(productPrice);
 
-			if (!recordIsSetBoolean(record, "deal")) {
-				loggerDebugM(sMethod, "end-1");
-				return false;
-			}
-			String discount = recordGetString(record, "deal");
+			
+			String discount = record.getDeal();
 			BigDecimal discountedPrice = this.createDiscountedPrice(productPrice, discount);
 			if (discountedPrice != null) {
 				persistableProductPrice.setDiscountedPrice(discountedPrice);
@@ -414,11 +261,11 @@ public class ProductImportService {
 		return true;
 	}
 
-	public boolean handleQuantity(ProductRequestMapData record, PersistableProduct product) {
+	public boolean handleQuantity(ProductRequestEntityData record, PersistableProduct product) {
 		String sMethod = "handleImages";
 		loggerDebugM(sMethod, "start");
 		try {
-			String stringQuantity = recordGetString(record, "quantity");
+			String stringQuantity = record.getQuantity();
 			if (StringUtils.isBlank(stringQuantity)) {
 				stringQuantity = "1";
 			}
@@ -435,49 +282,8 @@ public class ProductImportService {
 		return true;
 	}
 
-
-
 	private String cleanup(String field) {
 		return field.replaceAll("�", "");
-	}
-
-	private ProductOptionValue optValue(String code) {
-		ProductOptionValue optValue = new ProductOptionValue();
-		optValue.setCode(code);
-		return optValue;
-	}
-
-	private BigDecimal convertDimension(String value, String dimensions) {
-
-		// in our case we convert from cm to inches 1 * 0.393701
-		if (StringUtils.isBlank(value)) {
-			value = "0";
-		}
-		value = value.replaceAll(",", ".").trim();
-		// loggerDebug("Dimension " + value);
-		BigDecimal decimalValue = new BigDecimal(value);
-
-		if (StringUtils.isBlank(dimensions) || "CM".equals(dimensions)) {
-			decimalValue = decimalValue.multiply(new BigDecimal("0.393701"));
-		}
-
-		BigDecimal scaled = decimalValue.setScale(0, RoundingMode.HALF_UP);
-		return scaled;
-
-	}
-
-	private BigDecimal convertWeight(String value) {
-
-		// in our case we already have the good weight
-		if (StringUtils.isBlank(value)) {
-			value = "0";
-		}
-		value = value.replaceAll(",", ".").trim();
-		BigDecimal decimalValue = new BigDecimal(value);
-		BigDecimal scaled = decimalValue.setScale(0, RoundingMode.HALF_UP);
-		// decimalValue = decimalValue.multiply(new BigDecimal("0.393701"));
-		return scaled;
-
 	}
 
 	private BigDecimal createDiscountedPrice(BigDecimal price, String discount) {
@@ -517,20 +323,19 @@ public class ProductImportService {
 		LOGGER.error(ex.getMessage());
 	}
 
-	
 	private void dbgImgNotFound(File imgPath) {
 		String sMethod = "extractBytes2";
 		loggerDebugM(sMethod, "start");
-		
+
 		loggerDebug("--------------------------------------");
 		loggerDebug("IMAGE NOT FOUND " + imgPath.getName());
 		loggerDebug("IMAGE PATH " + imgPath.getAbsolutePath());
 		loggerDebug("--------------------------------------");
 		loggerDebugM(sMethod, "return");
-	
+
 	}
 
-	public byte[] extractBytes2(File imgPath,String extension) throws Exception {
+	public byte[] extractBytes2(File imgPath, String extension) throws Exception {
 		String sMethod = "extractBytes2";
 		loggerDebugM(sMethod, "start");
 		if (!imgPath.exists()) {
@@ -624,18 +429,9 @@ public class ProductImportService {
 		return quantity;
 	}
 
-	private List<String> getTokensWithCollection(String str, String token) {
-		return Collections.list(new StringTokenizer(str, token)).stream().map(t -> (String) t)
-				.collect(Collectors.toList());
-	}
-
 	public int minimumQuantity(int quantity) {
 
 		return Integer.parseInt("1");
-	}
-
-	private String alternativeIdentifier(ProductRequestMapData record) {
-		return recordGetString(record, "sku");
 	}
 
 }

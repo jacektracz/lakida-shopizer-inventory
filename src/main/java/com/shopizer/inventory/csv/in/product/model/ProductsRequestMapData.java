@@ -14,4 +14,4 @@ public class ProductsRequestMapData {
 	public void setProductItems(List<ProductRequestMapData> productItems) {
 		this.productItems = productItems;
 	}
-}
+}	

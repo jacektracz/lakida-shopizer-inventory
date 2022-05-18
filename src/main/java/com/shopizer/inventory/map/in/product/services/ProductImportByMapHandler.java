@@ -1,4 +1,4 @@
-package com.shopizer.inventory.csv.in.product.services;
+package com.shopizer.inventory.map.in.product.services;
 
 import java.io.FileInputStream;
 
@@ -10,12 +10,14 @@ import org.slf4j.LoggerFactory;
 import com.salesmanager.shop.model.catalog.product.PersistableProduct;
 import com.shopizer.inventory.csv.in.product.mapper.ProductRequesEntity2MapMapper;
 import com.shopizer.inventory.csv.in.product.mapper.ProductRequestCsv2EntityMapper;
+import com.shopizer.inventory.csv.in.product.model.ProductRequestEntityData;
 import com.shopizer.inventory.csv.in.product.model.ProductRequestMapData;
 import com.shopizer.inventory.csv.in.product.model.ProductsRequestEntityData;
 import com.shopizer.inventory.csv.in.product.model.ProductsRequestMapData;
+import com.shopizer.inventory.map.in.product.services.ProductImportImageByMapService;
 
-public class ProductImport {
-	private static final Logger LOGGER = LoggerFactory.getLogger(ProductImport.class);
+public class ProductImportByMapHandler {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ProductImportByMapHandler.class);
 	private static final String endPoint = "http://localhost:8080/api/v1/private/product?store=";
 	
 	private String IMAGE_EXT = "PNG";
@@ -60,17 +62,17 @@ public class ProductImport {
 			int ii = 0;
 
 			if (ii == 0) {
-				ProductImport productsImport = new ProductImport();
+				ProductImportByMapHandler productsImport = new ProductImportByMapHandler();
 				productsImport.mainImport();
 			}
 
 			if (ii == 1) {
-				ProductImport productsImport = new ProductImport();
+				ProductImportByMapHandler productsImport = new ProductImportByMapHandler();
 				productsImport.imagesDbgCheck();
 			}
 
 			if (ii == 2) {
-				ProductImport productsImport = new ProductImport();
+				ProductImportByMapHandler productsImport = new ProductImportByMapHandler();
 				productsImport.jsonReadDbgCheck();
 			}
 
@@ -85,7 +87,7 @@ public class ProductImport {
 		loggerDebugM(sMethod, "start");
 		try {
 			String ibd = getImgBaseDir();
-			ProductImport productsImport = new ProductImport();
+			ProductImportByMapHandler productsImport = new ProductImportByMapHandler();
 			String fn = "";
 			productsImport.importProducts(DRY_RUN, endPoint, MERCHANT, fn, ibd, IMAGE_EXT, 1);
 		} catch (Exception ex) {
@@ -113,7 +115,7 @@ public class ProductImport {
 		loggerDebugM(sMethod, "start");
 		
 		try {
-			ProductImportImageService productsImport = new ProductImportImageService();
+			ProductImportImageByMapService productsImport = new ProductImportImageByMapService();
 			String ibd = getImgBaseDir();
 			productsImport.handleCheckImages(ibd, "img_2", IMAGE_EXT);
 		} catch (Exception ex) {
@@ -137,13 +139,22 @@ public class ProductImport {
 		}		
 		ProductsRequestMapData dataMapped = new ProductsRequestMapData();
 		new ProductRequesEntity2MapMapper().getRequestProductsDataFromEntity(entityData, dataMapped);
-		handleImportProducts(dryRun, endpoint, merchant, fileName, imgBaseDir, imgExt, dataMapped);
+		handleImportProducts(dryRun, endpoint, merchant, 
+				fileName, imgBaseDir, 
+				imgExt, dataMapped,entityData);
 
 		loggerDebugM(sMethod, "end");
 	}
 
-	public void handleImportProducts(boolean dryRun, String endpoint, String merchant, String fileName,
-			String imgBaseDir, String imgExt, ProductsRequestMapData data) throws Exception {
+	public void handleImportProducts(
+			boolean dryRun, 
+			String endpoint, 
+			String merchant, 
+			String fileName,
+			String imgBaseDir, 
+			String imgExt, 
+			ProductsRequestMapData data,
+			ProductsRequestEntityData entitiesData) throws Exception {
 
 		String sMethod = "handleImportProducts";
 		loggerDebugM(sMethod, "start");
@@ -157,13 +168,15 @@ public class ProductImport {
 
 		for (ProductRequestMapData record : data.getProductItems()) {
 			loggerDebugM(sMethod, "start-record:" + ii);
-
+			ProductRequestEntityData entityData = entitiesData.getProductItems().get(ii);
+			record.setEntityData(entityData);
 			boolean isOk = handleMappedRecord(record, ii, dryRun, endpoint, merchant, fileName, imgBaseDir, imgExt);
 			if (isOk) {
 				count++;
 			}
 
 			loggerDebugM(sMethod, "end-record:" + ii);
+			ii++;
 		}
 
 		loggerDebug("------------------------------------");
@@ -180,8 +193,8 @@ public class ProductImport {
 		String sMethod = "handleMappedRecord";
 		loggerDebugM(sMethod, "start");
 		try {
-			ProductImportService pis = new ProductImportService();
-			ProductImportController pic = new ProductImportController();
+			ProductImportManagerByMapService pis = new ProductImportManagerByMapService();
+			ProductImportByMapController pic = new ProductImportByMapController();
 
 			loggerDebugM(sMethod, "start-record:" + ii);
 			PersistableProduct product = new PersistableProduct();

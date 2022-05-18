@@ -1,4 +1,4 @@
-package com.shopizer.inventory.csv.in.product.services;
+package com.shopizer.inventory.map.in.product.services;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;

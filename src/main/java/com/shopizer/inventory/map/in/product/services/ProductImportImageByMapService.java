@@ -1,4 +1,4 @@
-package com.shopizer.inventory.csv.in.product.services;
+package com.shopizer.inventory.map.in.product.services;
 
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
@@ -34,9 +34,9 @@ import com.salesmanager.shop.model.catalog.product.attribute.PersistableProductO
 import com.salesmanager.shop.model.catalog.product.attribute.ProductOptionValue;
 import com.shopizer.inventory.csv.in.product.model.ProductRequestMapData;
 
-public class ProductImportImageService {
+public class ProductImportImageByMapService {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(ProductImportImageService.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ProductImportImageByMapService.class);
 	
 	public boolean handleImages(ProductRequestMapData record, PersistableProduct product, String baseImageDir,String imgExt) {
 		String sMethod = "handleImages";

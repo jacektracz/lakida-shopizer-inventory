@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 public class ProductRequestMapData {	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProductRequestMapData.class);
+	private ProductRequestEntityData entityData;
 	private Map<String,String> values =  new HashMap<>();
 
 	public Map<String,String> getValues() {
@@ -72,6 +73,14 @@ public class ProductRequestMapData {
 		String stx = getDbgClassName() + ":" + sMethod + ":" + ttx;
 		LOGGER.debug(stx);
 		LOGGER.error(ex.getMessage());
+	}
+
+	public ProductRequestEntityData getEntityData() {
+		return entityData;
+	}
+
+	public void setEntityData(ProductRequestEntityData entityData) {
+		this.entityData = entityData;
 	}	
 	
 }
