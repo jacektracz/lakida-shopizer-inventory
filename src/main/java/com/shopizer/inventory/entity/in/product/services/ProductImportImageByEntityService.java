@@ -5,36 +5,19 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.Normalizer;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Random;
-import java.util.StringTokenizer;
-import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
 
-import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.salesmanager.shop.model.catalog.category.Category;
 import com.salesmanager.shop.model.catalog.product.PersistableImage;
 import com.salesmanager.shop.model.catalog.product.PersistableProduct;
-import com.salesmanager.shop.model.catalog.product.PersistableProductPrice;
-import com.salesmanager.shop.model.catalog.product.ProductDescription;
-import com.salesmanager.shop.model.catalog.product.ProductSpecification;
-import com.salesmanager.shop.model.catalog.product.attribute.PersistableProductAttribute;
-import com.salesmanager.shop.model.catalog.product.attribute.PersistableProductOption;
-import com.salesmanager.shop.model.catalog.product.attribute.PersistableProductOptionValue;
-import com.salesmanager.shop.model.catalog.product.attribute.ProductOptionValue;
 import com.shopizer.inventory.csv.in.product.model.ProductRequestEntityData;
 import com.shopizer.inventory.csv.in.product.model.ProductRequestImageData;
-import com.shopizer.inventory.csv.in.product.model.ProductRequestMapData;
 
 public class ProductImportImageByEntityService {
 
@@ -47,43 +30,59 @@ public class ProductImportImageByEntityService {
 		try {
 			List<PersistableImage> images = new ArrayList<PersistableImage>();
 			for (ProductRequestImageData imageItem : record.getImages()) {
-				String hardcodedImageName = imageItem.getImageName();
-				if (StringUtils.isBlank(hardcodedImageName)) {
-					loggerDebugM(sMethod, "end-3");
-					return false;
-				}
-				String shortName = hardcodedImageName + "." + imgExt.toLowerCase();
-				String imagePath = baseImageDir + hardcodedImageName + "." + imgExt.toLowerCase();
-
-				File imgPath = new File(imagePath.toString());
-
-				byte[] bytes = this.extractBytes2(imgPath, imgExt);
-
-				if (bytes == null) {
-					loggerDebugM(sMethod, "end-4-null-img-bytes");
-					return false;
-				}
-
-				logBytes(bytes);
-
-				PersistableImage persistableImage = new PersistableImage();
-				persistableImage.setBytes(bytes);
-				String imgPpathName = imgPath.getName();
-				loggerDebugM(sMethod, "imPpathName:" + imgPpathName);
-				persistableImage.setName(shortName);
-				persistableImage.setDefaultImage(true);
-				loggerDebugM(sMethod, "imagePath:" + imagePath);
-				persistableImage.setPath(imagePath);
-				images.add(persistableImage);
+				addImageToList(imageItem, images, baseImageDir, imgExt);
 			}
-			
 			product.setImages(images);
+			loggerDebugM(sMethod, "images-added:" + product.getImages().size());
 			loggerDebugM(sMethod, "end");
 		} catch (Exception ex) {
 			loggerExceptionM(sMethod, "end", ex);
 		}
 		loggerDebugM(sMethod, "end");
 		return true;
+	}
+
+	private boolean addImageToList(ProductRequestImageData imageItem, List<PersistableImage> images,
+			String baseImageDir, String imgExt) {
+		String sMethod = "addImageToList";
+		loggerDebugM(sMethod, "start");
+		try {
+
+			String hardcodedImageName = imageItem.getImageName();
+			if (StringUtils.isBlank(hardcodedImageName)) {
+				loggerDebugM(sMethod, "end-3");
+				return false;
+			}
+			String shortName = hardcodedImageName + "." + imgExt.toLowerCase();
+			String imagePath = baseImageDir + hardcodedImageName + "." + imgExt.toLowerCase();
+
+			File imgPath = new File(imagePath.toString());
+
+			byte[] bytes = this.extractBytes2(imgPath, imgExt);
+
+			if (bytes == null) {
+				loggerDebugM(sMethod, "end-4-null-img-bytes");
+				return false;
+			}
+
+			logBytes(bytes);
+
+			PersistableImage persistableImage = new PersistableImage();
+			persistableImage.setBytes(bytes);
+			String imgPpathName = imgPath.getName();
+			loggerDebugM(sMethod, "imPpathName:" + imgPpathName);
+			persistableImage.setName(shortName);
+			persistableImage.setDefaultImage(true);
+			loggerDebugM(sMethod, "imagePath:" + imagePath);
+			persistableImage.setPath(imagePath);
+			images.add(persistableImage);
+			loggerDebugM(sMethod, "end");
+			return true;
+
+		} catch (Exception ex) {
+			loggerExceptionM(sMethod, "end", ex);
+			return false;
+		}
 	}
 
 	public boolean handleCheckImages(String baseImageDir, String hardcodedImageName, String imgExt) {
@@ -195,21 +194,6 @@ public class ProductImportImageByEntityService {
 		loggerDebugM(sMethod, "end");
 	}
 
-	private boolean recordIsSetBoolean(ProductRequestMapData record, String key) {
-		String sMethod = "recordIsSetBoolean";
-		loggerDebugM(sMethod, "start:" + key);
-		boolean valueret = record.recordIsSetBoolean(key);
-		loggerDebugM(sMethod, "end:" + key + ":" + valueret);
-		return valueret;
-	}
-
-	private String recordGetString(ProductRequestMapData record, String key) {
-		String sMethod = "recordGetString";
-		loggerDebugM(sMethod, "start");
-		String valueret = record.recordGetString(key, "");
-		loggerDebugM(sMethod, "end");
-		return valueret;
-	}
 
 	public void imageTestWrite() {
 		BufferedImage bImage = null;

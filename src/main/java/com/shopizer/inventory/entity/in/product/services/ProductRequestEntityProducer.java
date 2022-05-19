@@ -145,7 +145,7 @@ public class ProductRequestEntityProducer {
 			product.setImageFile("img_2");
 			product.setPrice("221");
 			product.setPosition("4");
-			product.setProductType("NOT-SET");
+			product.setProductType("micro-stapa");
 			product.setImageName("img_2");
 			product.setImportStatus("1");
 			product.setCategory("kobieta");
