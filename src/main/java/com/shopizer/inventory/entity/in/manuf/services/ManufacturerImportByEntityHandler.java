@@ -12,7 +12,7 @@ import com.shopizer.inventory.entity.in.manuf.model.ManufacturersRequestEntityDa
 
 public class ManufacturerImportByEntityHandler {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ManufacturerImportByEntityHandler.class);
-	private static final String endPoint = "http://localhost:8080/api/v1/private/product?store=";
+	private static final String endPoint = "http://localhost:8080/api/v1/private/manufacturer?store=";
 
 	private String IMAGE_EXT = "PNG";
 	private static final String MERCHANT = "DEFAULT";
@@ -28,7 +28,7 @@ public class ManufacturerImportByEntityHandler {
 		if (ii == 0) {
 			sF = sF + "C://lkd//ht//apps_java8_in_action//app//src//";
 			sF = sF + "shopizer-inventory-csv//src//main//resources//";
-			sF = sF + "data-import//product//product-json//";
+			sF = sF + "data-import//manufacturer//manufacturer-json//";
 			sF = sF + "";
 			sF = sF + "";
 		}
@@ -39,7 +39,7 @@ public class ManufacturerImportByEntityHandler {
 		int ii = 0;
 		String sF = "";
 		if (ii == 0) {
-			sF = getImportFileBaseDir() + "product-loader-" + idx + ".json";
+			sF = getImportFileBaseDir() + "manufacturer-loader-" + idx + ".json";
 		}
 		return sF;
 	}
@@ -48,7 +48,7 @@ public class ManufacturerImportByEntityHandler {
 		int ii = 0;
 		String sF = "";
 		if (ii == 0) {
-			sF = getImportFileBaseDir() + "product-loader-" + idx + ".json";
+			sF = getImportFileBaseDir() + "manufacturer-loader-" + idx + ".json";
 		}
 		return sF;
 	}
@@ -198,7 +198,7 @@ public class ManufacturerImportByEntityHandler {
 		String sMethod = "handleMappedRecord";
 		loggerDebugM(sMethod, "start");
 		try {
-			ManufacturerImportManagerByEntityService pis = new ManufacturerImportManagerByEntityService();
+			ManufacturerImportMapperByEntityService pis = new ManufacturerImportMapperByEntityService();
 
 			loggerDebugM(sMethod, "start-record:" + ii);
 			PersistableManufacturer manufacturer = new PersistableManufacturer();

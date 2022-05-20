@@ -1,17 +1,20 @@
 package com.shopizer.inventory.entity.in.cat.services;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.salesmanager.shop.model.catalog.product.PersistableProduct;
+import com.salesmanager.shop.model.catalog.category.PersistableCategory;
+
 import com.shopizer.inventory.entity.in.cat.model.CategoryRequestEntityData;
 import com.shopizer.inventory.entity.in.cat.model.CategoriesRequestEntityData;
 
 public class CategoryImportByEntityHandler {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CategoryImportByEntityHandler.class);
-	private static final String endPoint = "http://localhost:8080/api/v1/private/product?store=";
+	private static final String endPoint = "http://localhost:8080/api/v1/private/category?store=";
 
 	private String IMAGE_EXT = "PNG";
 	private static final String MERCHANT = "DEFAULT";
@@ -27,7 +30,7 @@ public class CategoryImportByEntityHandler {
 		if (ii == 0) {
 			sF = sF + "C://lkd//ht//apps_java8_in_action//app//src//";
 			sF = sF + "shopizer-inventory-csv//src//main//resources//";
-			sF = sF + "data-import//product//product-json//";
+			sF = sF + "data-import//category//category-json//";
 			sF = sF + "";
 			sF = sF + "";
 		}
@@ -38,7 +41,7 @@ public class CategoryImportByEntityHandler {
 		int ii = 0;
 		String sF = "";
 		if (ii == 0) {
-			sF = getImportFileBaseDir() + "product-loader-" + idx + ".json";
+			sF = getImportFileBaseDir() + "category-loader-" + idx + ".json";
 		}
 		return sF;
 	}
@@ -47,7 +50,7 @@ public class CategoryImportByEntityHandler {
 		int ii = 0;
 		String sF = "";
 		if (ii == 0) {
-			sF = getImportFileBaseDir() + "product-loader-" + idx + ".json";
+			sF = getImportFileBaseDir() + "category-loader-" + idx + ".json";
 		}
 		return sF;
 	}
@@ -66,17 +69,17 @@ public class CategoryImportByEntityHandler {
 			int ii = 0;
 
 			if (ii == 0) {
-				CategoryImportByEntityHandler productsImport = new CategoryImportByEntityHandler();
-				productsImport.mainImport();
+				CategoryImportByEntityHandler itemToSendsImport = new CategoryImportByEntityHandler();
+				itemToSendsImport.mainImport();
 			}
 
 			if (ii == 2) {
-				CategoryImportByEntityHandler productsImport = new CategoryImportByEntityHandler();
-				productsImport.jsonReadDbgCheck();
+				CategoryImportByEntityHandler itemToSendsImport = new CategoryImportByEntityHandler();
+				itemToSendsImport.jsonReadDbgCheck();
 			}
 			if (ii == 3) {
-				CategoryImportByEntityHandler productsImport = new CategoryImportByEntityHandler();
-				productsImport.dataProducerExecutor();
+				CategoryImportByEntityHandler itemToSendsImport = new CategoryImportByEntityHandler();
+				itemToSendsImport.dataProducerExecutor();
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -88,12 +91,12 @@ public class CategoryImportByEntityHandler {
 		String sMethod = "dataProducerExecutor";
 		loggerDebugM(sMethod, "start");
 		try {
-			CategoriesRequestEntityData products = new CategoriesRequestEntityData();
+			CategoriesRequestEntityData itemToSends = new CategoriesRequestEntityData();
 			CategoryRequestEntityProducer producer = new CategoryRequestEntityProducer();
-			producer.createRecord(products);
+			producer.createRecord(itemToSends);
 			CategoryRequestEntityWriter writerHandler = new CategoryRequestEntityWriter();
 			String fn = getDebugJsonFileName("pi-4");
-			writerHandler.writeRecord(products, 0, fn);
+			writerHandler.writeRecord(itemToSends, 0, fn);
 			loggerDebugM(sMethod, "end");
 		} catch (Exception ex) {
 			loggerExceptionM(sMethod, "end", ex);
@@ -105,10 +108,10 @@ public class CategoryImportByEntityHandler {
 		loggerDebugM(sMethod, "start");
 		try {
 			String ibd = getImgBaseDir();
-			CategoryImportByEntityHandler productsImport = new CategoryImportByEntityHandler();
+			CategoryImportByEntityHandler itemToSendsImport = new CategoryImportByEntityHandler();
 			String fn = getDebugJsonFileName("ld-4");
 
-			productsImport.importCategories(DRY_RUN, endPoint, MERCHANT, fn, ibd, IMAGE_EXT, 1);
+			itemToSendsImport.importCategories(DRY_RUN, endPoint, MERCHANT, fn, ibd, IMAGE_EXT, 1);
 		} catch (Exception ex) {
 			loggerExceptionM(sMethod, "end", ex);
 		}
@@ -154,7 +157,7 @@ public class CategoryImportByEntityHandler {
 			loggerDebugM(sMethod, "end");
 			return;
 		}
-		List<CategoryRequestEntityData> products = entityData.getCategoryItems();
+		List<CategoryRequestEntityData> itemToSends = entityData.getCategoryItems();
 		handleImportCategories(dryRun, endpoint, merchant, fileName, imgBaseDir, imgExt, entityData);
 
 		loggerDebugM(sMethod, "end");
@@ -173,10 +176,10 @@ public class CategoryImportByEntityHandler {
 			loggerDebugM(sMethod, "end");
 			return;
 		}
-
+		Map<String,PersistableCategory> categoryMap = new HashMap<String,PersistableCategory>();
 		for (CategoryRequestEntityData entityData : entitiesData.getCategoryItems()) {
 			loggerDebugM(sMethod, "start-record:" + ii);
-			boolean isOk = handleMappedRecord(entityData, ii, dryRun, endpoint, merchant, fileName, imgBaseDir, imgExt);
+			boolean isOk = handleMappedRecord(categoryMap,entityData, ii, dryRun, endpoint, merchant, fileName, imgBaseDir, imgExt);
 			if (isOk) {
 				count++;
 			}
@@ -191,28 +194,28 @@ public class CategoryImportByEntityHandler {
 		loggerDebugM(sMethod, "end");
 	}
 
-	public boolean handleMappedRecord(CategoryRequestEntityData entityData, int ii, boolean dryRun, String endpoint,
+	public boolean handleMappedRecord(Map<String,PersistableCategory> categoryMap,CategoryRequestEntityData entityData, int ii, boolean dryRun, String endpoint,
 			String merchant, String fileName, String imgBaseDir, String imgExt) {
 
 		String sMethod = "handleMappedRecord";
 		loggerDebugM(sMethod, "start");
 		try {
-			CategoryImportManagerByEntityService pis = new CategoryImportManagerByEntityService();
+			CategoryImportMapperByEntityService pis = new CategoryImportMapperByEntityService();
 
 			loggerDebugM(sMethod, "start-record:" + ii);
-			PersistableProduct product = new PersistableProduct();
+			PersistableCategory itemToSend = new PersistableCategory();
 
-			boolean recordOk = pis.handleRecord(entityData, product, ii, imgBaseDir, imgExt);
+			boolean recordOk = pis.handleRecord(categoryMap,entityData, itemToSend, ii, imgBaseDir, imgExt);
 			if (!recordOk) {
 				loggerDebugM(sMethod, "end-false-record:" + ii);
 				return false;
 			}
 
-			// debugRecord(record, product, ii);
+			// debugRecord(record, itemToSend, ii);
 
 			CategoryImportByEntityController pic = new CategoryImportByEntityController();
-			pic.sendRecord(entityData, product, ii, dryRun, endpoint + merchant);
-			boolean isOkCount = handleMaxCount(entityData, product, ii);
+			pic.sendRecord(entityData, itemToSend, ii, dryRun, endpoint + merchant);
+			boolean isOkCount = handleMaxCount(entityData, itemToSend, ii);
 			if (!isOkCount) {
 				loggerDebugM(sMethod, "end-false-record:" + ii);
 				return false;
@@ -226,11 +229,11 @@ public class CategoryImportByEntityHandler {
 		}
 	}
 
-	public boolean handleMaxCount(CategoryRequestEntityData record, PersistableProduct product, int ii) {
+	public boolean handleMaxCount(CategoryRequestEntityData record, PersistableCategory itemToSend, int ii) {
 		String sMethod = "handleRecord";
 		loggerDebugM(sMethod, "start");
 		try {
-			loggerDebug("Created product in row " + ii + " Dry Run [" + DRY_RUN + "]");
+			loggerDebug("Created itemToSend in row " + ii + " Dry Run [" + DRY_RUN + "]");
 
 			if (ii == MAX_COUNT) {
 				loggerDebug("Reached MAX_COUNT [" + MAX_COUNT + "]");

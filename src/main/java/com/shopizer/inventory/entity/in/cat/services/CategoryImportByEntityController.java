@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.codec.Base64;
 import org.springframework.web.client.RestTemplate;
 
+import com.salesmanager.shop.model.catalog.category.PersistableCategory;
 import com.salesmanager.shop.model.catalog.product.PersistableProduct;
 import com.shopizer.inventory.entity.in.cat.model.CategoryRequestEntityData;
 
@@ -41,7 +42,7 @@ public class CategoryImportByEntityController {
 		}
 	}
 	
-	public boolean sendRecord(CategoryRequestEntityData record ,PersistableProduct product,int ii,boolean dryRun,String uri) {
+	public boolean sendRecord(CategoryRequestEntityData record ,PersistableCategory product,int ii,boolean dryRun,String uri) {
 		String sMethod = "sendRecord";
 		loggerDebugM(sMethod, "start");
 		try {

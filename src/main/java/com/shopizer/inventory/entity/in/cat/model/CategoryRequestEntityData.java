@@ -8,6 +8,9 @@ public class CategoryRequestEntityData {
 	private String titlePl;		
 	private String friendlyUrlEn;
 	private String friendlyUrlPl;
+	private String recordPosition;
+	private String recordVisible;
+	private String recordParent;
 	public String getCode() {
 		return code;
 	}
@@ -49,6 +52,24 @@ public class CategoryRequestEntityData {
 	}
 	public void setFriendlyUrlEn(String friendlyUrlEn) {
 		this.friendlyUrlEn = friendlyUrlEn;
+	}
+	public String getRecordPosition() {
+		return recordPosition;
+	}
+	public void setRecordPosition(String recordPosition) {
+		this.recordPosition = recordPosition;
+	}
+	public String getRecordVisible() {
+		return recordVisible;
+	}
+	public void setRecordVisible(String recordVisible) {
+		this.recordVisible = recordVisible;
+	}
+	public String getRecordParent() {
+		return recordParent;
+	}
+	public void setRecordParent(String recordParent) {
+		this.recordParent = recordParent;
 	}
 	
 }
