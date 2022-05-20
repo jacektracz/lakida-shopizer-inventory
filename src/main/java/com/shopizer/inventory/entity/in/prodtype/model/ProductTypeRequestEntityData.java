@@ -1,6 +1,6 @@
-package com.shopizer.inventory.entity.in.shotype.model;
+package com.shopizer.inventory.entity.in.prodtype.model;
 
-public class ManufacturerRequestEntityData {
+public class ProductTypeRequestEntityData {
 	private String code;
 	private String nameEn;
 	private String titleEn;

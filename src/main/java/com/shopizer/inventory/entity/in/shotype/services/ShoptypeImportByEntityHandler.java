@@ -6,11 +6,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.salesmanager.shop.model.catalog.manufacturer.PersistableManufacturer;
-import com.shopizer.inventory.entity.in.shotype.model.ManufacturerRequestEntityData;
-import com.shopizer.inventory.entity.in.shotype.model.ManufacturersRequestEntityData;
+import com.shopizer.inventory.entity.in.shotype.model.ShoptypeRequestEntityData;
+import com.shopizer.inventory.entity.in.shotype.model.ShoptypesRequestEntityData;
 
-public class ManufacturerImportByEntityHandler {
-	private static final Logger LOGGER = LoggerFactory.getLogger(ManufacturerImportByEntityHandler.class);
+public class ShoptypeImportByEntityHandler {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ShoptypeImportByEntityHandler.class);
 	private static final String endPoint = "http://localhost:8080/api/v1/private/manufacturer?store=";
 
 	private String IMAGE_EXT = "PNG";
@@ -66,16 +66,16 @@ public class ManufacturerImportByEntityHandler {
 			int ii = 0;
 
 			if (ii == 0) {
-				ManufacturerImportByEntityHandler productsImport = new ManufacturerImportByEntityHandler();
+				ShoptypeImportByEntityHandler productsImport = new ShoptypeImportByEntityHandler();
 				productsImport.mainImport();
 			}
 
 			if (ii == 2) {
-				ManufacturerImportByEntityHandler productsImport = new ManufacturerImportByEntityHandler();
+				ShoptypeImportByEntityHandler productsImport = new ShoptypeImportByEntityHandler();
 				productsImport.jsonReadDbgCheck();
 			}
 			if (ii == 3) {
-				ManufacturerImportByEntityHandler productsImport = new ManufacturerImportByEntityHandler();
+				ShoptypeImportByEntityHandler productsImport = new ShoptypeImportByEntityHandler();
 				productsImport.dataProducerExecutor();
 			}
 		} catch (Exception e) {
@@ -88,10 +88,10 @@ public class ManufacturerImportByEntityHandler {
 		String sMethod = "dataProducerExecutor";
 		loggerDebugM(sMethod, "start");
 		try {
-			ManufacturersRequestEntityData products = new ManufacturersRequestEntityData();
-			ManufacturerRequestEntityProducer producer = new ManufacturerRequestEntityProducer();
+			ShoptypesRequestEntityData products = new ShoptypesRequestEntityData();
+			ShoptypeRequestEntityProducer producer = new ShoptypeRequestEntityProducer();
 			producer.createRecord(products);
-			ManufacturerRequestEntityWriter writerHandler = new ManufacturerRequestEntityWriter();
+			ShoptypeRequestEntityWriter writerHandler = new ShoptypeRequestEntityWriter();
 			String fn = getDebugJsonFileName("pi-4");
 			writerHandler.writeRecord(products, 0, fn);
 			loggerDebugM(sMethod, "end");
@@ -105,7 +105,7 @@ public class ManufacturerImportByEntityHandler {
 		loggerDebugM(sMethod, "start");
 		try {
 			String ibd = getImgBaseDir();
-			ManufacturerImportByEntityHandler productsImport = new ManufacturerImportByEntityHandler();
+			ShoptypeImportByEntityHandler productsImport = new ShoptypeImportByEntityHandler();
 			String fn = getDebugJsonFileName("ld-4");
 
 			productsImport.importManufacturers(DRY_RUN, endPoint, MERCHANT, fn, ibd, IMAGE_EXT, 1);
@@ -120,10 +120,10 @@ public class ManufacturerImportByEntityHandler {
 
 		try {
 			String fn = getImportJsonFileName("ld-4");
-			ManufacturerRequestEntityReader entityReader = new ManufacturerRequestEntityReader();
-			ManufacturersRequestEntityData entities = entityReader.readEntityRecordFromJsonFile(fn);
+			ShoptypeRequestEntityReader entityReader = new ShoptypeRequestEntityReader();
+			ShoptypesRequestEntityData entities = entityReader.readEntityRecordFromJsonFile(fn);
 
-			ManufacturerRequestEntityWriter writerHandler = new ManufacturerRequestEntityWriter();
+			ShoptypeRequestEntityWriter writerHandler = new ShoptypeRequestEntityWriter();
 			String json = writerHandler.getRecordAsJsonString(entities);
 			loggerDebugM(sMethod, "json:" + json);
 			String fnwrtite = getDebugJsonFileName("test-ld-4");
@@ -146,21 +146,21 @@ public class ManufacturerImportByEntityHandler {
 		String sMethod = "importManufacturers";
 		loggerDebugM(sMethod, "start");
 		String fn = fileName;
-		ManufacturerRequestEntityReader entityReader = new ManufacturerRequestEntityReader();
-		ManufacturersRequestEntityData entityData = entityReader.readEntityRecordFromJsonFile(fn);
+		ShoptypeRequestEntityReader entityReader = new ShoptypeRequestEntityReader();
+		ShoptypesRequestEntityData entityData = entityReader.readEntityRecordFromJsonFile(fn);
 
 		if (entityData == null) {
 			loggerDebugM(sMethod, "end");
 			return;
 		}
-		List<ManufacturerRequestEntityData> products = entityData.getManufacturerItems();
+		List<ShoptypeRequestEntityData> products = entityData.getManufacturerItems();
 		handleImportManufacturers(dryRun, endpoint, merchant, fileName, imgBaseDir, imgExt, entityData);
 
 		loggerDebugM(sMethod, "end");
 	}
 
 	public void handleImportManufacturers(boolean dryRun, String endpoint, String merchant, String fileName,
-			String imgBaseDir, String imgExt, ManufacturersRequestEntityData entitiesData) throws Exception {
+			String imgBaseDir, String imgExt, ShoptypesRequestEntityData entitiesData) throws Exception {
 
 		String sMethod = "handleImportManufacturers";
 		loggerDebugM(sMethod, "start");
@@ -172,7 +172,7 @@ public class ManufacturerImportByEntityHandler {
 			return;
 		}
 
-		for (ManufacturerRequestEntityData entityData : entitiesData.getManufacturerItems()) {
+		for (ShoptypeRequestEntityData entityData : entitiesData.getManufacturerItems()) {
 			loggerDebugM(sMethod, "start-record:" + ii);
 			boolean isOk = handleMappedRecord(entityData, ii, dryRun, endpoint, merchant, fileName, imgBaseDir, imgExt);
 			if (isOk) {
@@ -189,13 +189,13 @@ public class ManufacturerImportByEntityHandler {
 		loggerDebugM(sMethod, "end");
 	}
 
-	public boolean handleMappedRecord(ManufacturerRequestEntityData entityData, int ii, boolean dryRun, String endpoint,
+	public boolean handleMappedRecord(ShoptypeRequestEntityData entityData, int ii, boolean dryRun, String endpoint,
 			String merchant, String fileName, String imgBaseDir, String imgExt) {
 
 		String sMethod = "handleMappedRecord";
 		loggerDebugM(sMethod, "start");
 		try {
-			ManufacturerImportMapperByEntityService pis = new ManufacturerImportMapperByEntityService();
+			ShoptypeImportMapperByEntityService pis = new ShoptypeImportMapperByEntityService();
 
 			loggerDebugM(sMethod, "start-record:" + ii);
 			PersistableManufacturer product = new PersistableManufacturer();
@@ -208,7 +208,7 @@ public class ManufacturerImportByEntityHandler {
 
 			// debugRecord(record, product, ii);
 
-			ManufacturerImportByEntityController pic = new ManufacturerImportByEntityController();
+			ShoptypeImportByEntityController pic = new ShoptypeImportByEntityController();
 			pic.sendRecord(entityData, product, ii, dryRun, endpoint + merchant);
 			boolean isOkCount = handleMaxCount(entityData, product, ii);
 			if (!isOkCount) {
@@ -224,7 +224,7 @@ public class ManufacturerImportByEntityHandler {
 		}
 	}
 
-	public boolean handleMaxCount(ManufacturerRequestEntityData record, PersistableManufacturer product, int ii) {
+	public boolean handleMaxCount(ShoptypeRequestEntityData record, PersistableManufacturer product, int ii) {
 		String sMethod = "handleRecord";
 		loggerDebugM(sMethod, "start");
 		try {

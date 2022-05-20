@@ -6,26 +6,26 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.shopizer.inventory.entity.in.shotype.model.ManufacturersRequestEntityData;
+import com.shopizer.inventory.entity.in.shotype.model.ShoptypesRequestEntityData;
 
 
 
-public class ManufacturerRequestEntityReader {
+public class ShoptypeRequestEntityReader {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(ManufacturerRequestEntityReader.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ShoptypeRequestEntityReader.class);
 	
 	private String getDbgClassName() {
 		return "ManufacturerRequestEntityReader::";
 	}
 	
-	public ManufacturersRequestEntityData readEntityRecordFromJsonFile(String fileName) {
+	public ShoptypesRequestEntityData readEntityRecordFromJsonFile(String fileName) {
 		String sMethod = "readEntityRecordFromJsonFile";
 		loggerDebugM(sMethod, "start");
 		try {
 			loggerDebugM(sMethod, "file-name:" + fileName);	
 			ObjectMapper mapper = new ObjectMapper();
-			ManufacturersRequestEntityData mp = mapper.readValue(new FileInputStream(fileName),
-					ManufacturersRequestEntityData.class);
+			ShoptypesRequestEntityData mp = mapper.readValue(new FileInputStream(fileName),
+					ShoptypesRequestEntityData.class);
 			return mp;
 		} catch (Exception ex) {
 			loggerExceptionM(sMethod, "end", ex);

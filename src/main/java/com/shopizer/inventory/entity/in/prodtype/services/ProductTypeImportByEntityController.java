@@ -1,4 +1,4 @@
-package com.shopizer.inventory.entity.in.shotype.services;
+package com.shopizer.inventory.entity.in.prodtype.services;
 
 import java.nio.charset.Charset;
 
@@ -13,17 +13,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.codec.Base64;
 import org.springframework.web.client.RestTemplate;
 
-import com.salesmanager.shop.model.catalog.manufacturer.PersistableManufacturer;
-import com.salesmanager.shop.model.catalog.product.PersistableProduct;
-import com.shopizer.inventory.entity.in.shotype.model.ManufacturerRequestEntityData;
+import com.salesmanager.shop.model.catalog.product.type.PersistableProductType;
+import com.shopizer.inventory.entity.in.prodtype.model.ProductTypeRequestEntityData;
 
 
 
-public class ManufacturerImportByEntityController {
+public class ProductTypeImportByEntityController {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(ManufacturerImportByEntityController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ProductTypeImportByEntityController.class);
 	
-	public boolean sendRecord(ManufacturerRequestEntityData record ,PersistableManufacturer itemToSend,int ii,boolean dryRun,String uri) {
+	public boolean sendRecord(ProductTypeRequestEntityData record ,PersistableProductType itemToSend,int ii,boolean dryRun,String uri) {
 		String sMethod = "sendRecord";
 		loggerDebugM(sMethod, "start");
 		try {
@@ -40,8 +39,8 @@ public class ManufacturerImportByEntityController {
 				RestTemplate restTemplate = new RestTemplate();
 				HttpHeaders httpHeader = getHeader(dryRun);
 				HttpEntity<String> entity = new HttpEntity<String>(json, httpHeader);
-				ResponseEntity<PersistableProduct> response = restTemplate.postForEntity(uri, entity, PersistableProduct.class);
-				PersistableProduct prod = (PersistableProduct) response.getBody();
+				ResponseEntity<PersistableProductType> response = restTemplate.postForEntity(uri, entity, PersistableProductType.class);
+				PersistableProductType prod = (PersistableProductType) response.getBody();
 				loggerDebugM(sMethod,"Manufacturer:" + prod.toString());
 			}
 			
