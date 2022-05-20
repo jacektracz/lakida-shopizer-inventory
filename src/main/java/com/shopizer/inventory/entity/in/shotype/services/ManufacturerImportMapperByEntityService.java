@@ -13,9 +13,9 @@ import com.salesmanager.shop.model.catalog.product.PersistableProduct;
 import com.shopizer.inventory.entity.in.shotype.model.ManufacturerRequestEntityData;
 
 
-public class ManufacturerImportManagerByEntityService {
+public class ManufacturerImportMapperByEntityService {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ManufacturerImportManagerByEntityService.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ManufacturerImportMapperByEntityService.class);
 
 	private String langs[] = { "en" };
 

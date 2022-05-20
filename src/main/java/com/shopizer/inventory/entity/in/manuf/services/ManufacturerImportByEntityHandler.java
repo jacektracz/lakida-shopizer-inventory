@@ -5,6 +5,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.salesmanager.shop.model.catalog.manufacturer.PersistableManufacturer;
 import com.salesmanager.shop.model.catalog.product.PersistableProduct;
 import com.shopizer.inventory.entity.in.manuf.model.ManufacturerRequestEntityData;
 import com.shopizer.inventory.entity.in.manuf.model.ManufacturersRequestEntityData;
@@ -200,9 +201,9 @@ public class ManufacturerImportByEntityHandler {
 			ManufacturerImportManagerByEntityService pis = new ManufacturerImportManagerByEntityService();
 
 			loggerDebugM(sMethod, "start-record:" + ii);
-			PersistableProduct product = new PersistableProduct();
+			PersistableManufacturer manufacturer = new PersistableManufacturer();
 
-			boolean recordOk = pis.handleRecord(entityData, product, ii, imgBaseDir, imgExt);
+			boolean recordOk = pis.handleRecord(entityData, manufacturer, ii, imgBaseDir, imgExt);
 			if (!recordOk) {
 				loggerDebugM(sMethod, "end-false-record:" + ii);
 				return false;
@@ -211,8 +212,8 @@ public class ManufacturerImportByEntityHandler {
 			// debugRecord(record, product, ii);
 
 			ManufacturerImportByEntityController pic = new ManufacturerImportByEntityController();
-			pic.sendRecord(entityData, product, ii, dryRun, endpoint + merchant);
-			boolean isOkCount = handleMaxCount(entityData, product, ii);
+			pic.sendRecord(entityData, manufacturer, ii, dryRun, endpoint + merchant);
+			boolean isOkCount = handleMaxCount(entityData, manufacturer, ii);
 			if (!isOkCount) {
 				loggerDebugM(sMethod, "end-false-record:" + ii);
 				return false;
@@ -226,7 +227,7 @@ public class ManufacturerImportByEntityHandler {
 		}
 	}
 
-	public boolean handleMaxCount(ManufacturerRequestEntityData record, PersistableProduct product, int ii) {
+	public boolean handleMaxCount(ManufacturerRequestEntityData record, PersistableManufacturer manufacturer , int ii) {
 		String sMethod = "handleRecord";
 		loggerDebugM(sMethod, "start");
 		try {

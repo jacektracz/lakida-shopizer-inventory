@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.salesmanager.shop.model.catalog.manufacturer.PersistableManufacturer;
-import com.salesmanager.shop.model.catalog.product.PersistableProduct;
 import com.shopizer.inventory.entity.in.shotype.model.ManufacturerRequestEntityData;
 import com.shopizer.inventory.entity.in.shotype.model.ManufacturersRequestEntityData;
 
@@ -28,7 +27,7 @@ public class ManufacturerImportByEntityHandler {
 		if (ii == 0) {
 			sF = sF + "C://lkd//ht//apps_java8_in_action//app//src//";
 			sF = sF + "shopizer-inventory-csv//src//main//resources//";
-			sF = sF + "data-import//product//product-json//";
+			sF = sF + "data-import//manufacturer//manufacturer-json//";
 			sF = sF + "";
 			sF = sF + "";
 		}
@@ -39,7 +38,7 @@ public class ManufacturerImportByEntityHandler {
 		int ii = 0;
 		String sF = "";
 		if (ii == 0) {
-			sF = getImportFileBaseDir() + "product-loader-" + idx + ".json";
+			sF = getImportFileBaseDir() + "manufacturer-loader-" + idx + ".json";
 		}
 		return sF;
 	}
@@ -196,7 +195,7 @@ public class ManufacturerImportByEntityHandler {
 		String sMethod = "handleMappedRecord";
 		loggerDebugM(sMethod, "start");
 		try {
-			ManufacturerImportManagerByEntityService pis = new ManufacturerImportManagerByEntityService();
+			ManufacturerImportMapperByEntityService pis = new ManufacturerImportMapperByEntityService();
 
 			loggerDebugM(sMethod, "start-record:" + ii);
 			PersistableManufacturer product = new PersistableManufacturer();
