@@ -2,7 +2,6 @@ package com.shopizer.inventory.entity.in.shotype.services;
 
 import java.nio.charset.Charset;
 
-import org.apache.commons.csv.CSVRecord;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.ObjectWriter;
 import org.slf4j.Logger;
@@ -14,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.codec.Base64;
 import org.springframework.web.client.RestTemplate;
 
+import com.salesmanager.shop.model.catalog.manufacturer.PersistableManufacturer;
 import com.salesmanager.shop.model.catalog.product.PersistableProduct;
 import com.shopizer.inventory.entity.in.shotype.model.ManufacturerRequestEntityData;
 
@@ -23,31 +23,13 @@ public class ManufacturerImportByEntityController {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ManufacturerImportByEntityController.class);
 	
-	public boolean debugRecord(CSVRecord record,PersistableProduct product,int ii) {
-		String sMethod = "debugRecord";
-		loggerDebugM(sMethod, "start");
-		try {
-			
-			ObjectWriter writer = new ObjectMapper().writer().withDefaultPrettyPrinter();
-			String json = writer.writeValueAsString(product);
-			
-			loggerDebug("Line " + ii + " ********************");
-			loggerDebug(json);
-			
-			return true;
-		}catch(Exception ex) {
-			loggerExceptionM(sMethod, "end",ex);
-			return false;
-		}
-	}
-	
-	public boolean sendRecord(ManufacturerRequestEntityData record ,PersistableProduct product,int ii,boolean dryRun,String uri) {
+	public boolean sendRecord(ManufacturerRequestEntityData record ,PersistableManufacturer itemToSend,int ii,boolean dryRun,String uri) {
 		String sMethod = "sendRecord";
 		loggerDebugM(sMethod, "start");
 		try {
 			
 			ObjectWriter writer = new ObjectMapper().writer().withDefaultPrettyPrinter();
-			String json = writer.writeValueAsString(product);
+			String json = writer.writeValueAsString(itemToSend);
 			
 			loggerDebug("Line " + ii + " ********************");
 			loggerDebug(json);
@@ -60,7 +42,7 @@ public class ManufacturerImportByEntityController {
 				HttpEntity<String> entity = new HttpEntity<String>(json, httpHeader);
 				ResponseEntity<PersistableProduct> response = restTemplate.postForEntity(uri, entity, PersistableProduct.class);
 				PersistableProduct prod = (PersistableProduct) response.getBody();
-				loggerDebugM(sMethod,"PRODUCT:" + prod.toString());
+				loggerDebugM(sMethod,"Manufacturer:" + prod.toString());
 			}
 			
 			return true;

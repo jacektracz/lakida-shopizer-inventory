@@ -1,10 +1,14 @@
 package com.shopizer.inventory.entity.in.shotype.services;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.salesmanager.shop.model.catalog.manufacturer.ManufacturerDescription;
+import com.salesmanager.shop.model.catalog.manufacturer.PersistableManufacturer;
 import com.salesmanager.shop.model.catalog.product.PersistableProduct;
 import com.shopizer.inventory.entity.in.shotype.model.ManufacturerRequestEntityData;
 
@@ -15,11 +19,34 @@ public class ManufacturerImportManagerByEntityService {
 
 	private String langs[] = { "en" };
 
-	public boolean handleRecord(ManufacturerRequestEntityData entityData, PersistableProduct product, int ii,
+	public boolean handleRecord(ManufacturerRequestEntityData entityData, PersistableManufacturer itemToSendt, int ii,
 			String imgBaseDir, String imgExt) {
 		String sMethod = "handleRecord";
 		loggerDebugM(sMethod, "start");
 		try {
+			PersistableManufacturer manufacturer = new PersistableManufacturer();
+			manufacturer.setCode(entityData.getCode());
+			manufacturer.setId(null);
+
+			List<ManufacturerDescription> descriptions = new ArrayList<ManufacturerDescription>();
+			
+			ManufacturerDescription descriptionEn = new ManufacturerDescription();
+			descriptionEn.setLanguage("en");
+			descriptionEn.setName(entityData.getNameEn());
+			descriptionEn.setDescription(entityData.getNameEn());	
+
+			descriptions.add(descriptionEn);
+			
+			//add other description
+			ManufacturerDescription descriptionPl = new ManufacturerDescription();
+			descriptionPl.setId(null);
+			descriptionPl.setLanguage("pl");
+			descriptionPl.setName(entityData.getNameEn());
+			descriptionPl.setDescription(entityData.getNameEn());	
+			
+			descriptions.add(descriptionPl);
+			manufacturer.setDescriptions(descriptions);
+			
 			return true;
 		} catch (Exception ex) {
 			loggerExceptionM(sMethod, "end", ex);

@@ -5,13 +5,14 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.salesmanager.shop.model.catalog.manufacturer.PersistableManufacturer;
 import com.salesmanager.shop.model.catalog.product.PersistableProduct;
 import com.shopizer.inventory.entity.in.shotype.model.ManufacturerRequestEntityData;
 import com.shopizer.inventory.entity.in.shotype.model.ManufacturersRequestEntityData;
 
 public class ManufacturerImportByEntityHandler {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ManufacturerImportByEntityHandler.class);
-	private static final String endPoint = "http://localhost:8080/api/v1/private/product?store=";
+	private static final String endPoint = "http://localhost:8080/api/v1/private/manufacturer?store=";
 
 	private String IMAGE_EXT = "PNG";
 	private static final String MERCHANT = "DEFAULT";
@@ -139,17 +140,16 @@ public class ManufacturerImportByEntityHandler {
 	private String getItemSelector() {
 		return "-S1";
 	}
-	
-	public void importManufacturers(boolean dryRun, String endpoint, String merchant, String fileName, String imgBaseDir,
-			String imgExt, int importType) throws Exception {
+
+	public void importManufacturers(boolean dryRun, String endpoint, String merchant, String fileName,
+			String imgBaseDir, String imgExt, int importType) throws Exception {
 
 		String sMethod = "importManufacturers";
 		loggerDebugM(sMethod, "start");
 		String fn = fileName;
 		ManufacturerRequestEntityReader entityReader = new ManufacturerRequestEntityReader();
 		ManufacturersRequestEntityData entityData = entityReader.readEntityRecordFromJsonFile(fn);
-		
-		
+
 		if (entityData == null) {
 			loggerDebugM(sMethod, "end");
 			return;
@@ -159,7 +159,6 @@ public class ManufacturerImportByEntityHandler {
 
 		loggerDebugM(sMethod, "end");
 	}
-	
 
 	public void handleImportManufacturers(boolean dryRun, String endpoint, String merchant, String fileName,
 			String imgBaseDir, String imgExt, ManufacturersRequestEntityData entitiesData) throws Exception {
@@ -200,7 +199,7 @@ public class ManufacturerImportByEntityHandler {
 			ManufacturerImportManagerByEntityService pis = new ManufacturerImportManagerByEntityService();
 
 			loggerDebugM(sMethod, "start-record:" + ii);
-			PersistableProduct product = new PersistableProduct();
+			PersistableManufacturer product = new PersistableManufacturer();
 
 			boolean recordOk = pis.handleRecord(entityData, product, ii, imgBaseDir, imgExt);
 			if (!recordOk) {
@@ -226,7 +225,7 @@ public class ManufacturerImportByEntityHandler {
 		}
 	}
 
-	public boolean handleMaxCount(ManufacturerRequestEntityData record, PersistableProduct product, int ii) {
+	public boolean handleMaxCount(ManufacturerRequestEntityData record, PersistableManufacturer product, int ii) {
 		String sMethod = "handleRecord";
 		loggerDebugM(sMethod, "start");
 		try {
