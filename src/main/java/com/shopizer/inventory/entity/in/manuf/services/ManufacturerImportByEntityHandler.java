@@ -1,4 +1,4 @@
-package com.shopizer.inventory.entity.in.product.services;
+package com.shopizer.inventory.entity.in.manuf.services;
 
 import java.util.List;
 
@@ -6,12 +6,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.salesmanager.shop.model.catalog.product.PersistableProduct;
-import com.shopizer.inventory.entity.in.product.model.ProductRequestEntityData;
-import com.shopizer.inventory.entity.in.product.model.ProductsRequestEntityData;
-import com.shopizer.inventory.map.in.product.services.ProductImportImageByMapService;
+import com.shopizer.inventory.entity.in.manuf.model.ManufacturerRequestEntityData;
+import com.shopizer.inventory.entity.in.manuf.model.ManufacturersRequestEntityData;
 
-public class ProductImportByEntityHandler {
-	private static final Logger LOGGER = LoggerFactory.getLogger(ProductImportByEntityHandler.class);
+public class ManufacturerImportByEntityHandler {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ManufacturerImportByEntityHandler.class);
 	private static final String endPoint = "http://localhost:8080/api/v1/private/product?store=";
 
 	private String IMAGE_EXT = "PNG";
@@ -67,21 +66,16 @@ public class ProductImportByEntityHandler {
 			int ii = 0;
 
 			if (ii == 0) {
-				ProductImportByEntityHandler productsImport = new ProductImportByEntityHandler();
+				ManufacturerImportByEntityHandler productsImport = new ManufacturerImportByEntityHandler();
 				productsImport.mainImport();
 			}
 
-			if (ii == 1) {
-				ProductImportByEntityHandler productsImport = new ProductImportByEntityHandler();
-				productsImport.imagesDbgCheck();
-			}
-
 			if (ii == 2) {
-				ProductImportByEntityHandler productsImport = new ProductImportByEntityHandler();
+				ManufacturerImportByEntityHandler productsImport = new ManufacturerImportByEntityHandler();
 				productsImport.jsonReadDbgCheck();
 			}
 			if (ii == 3) {
-				ProductImportByEntityHandler productsImport = new ProductImportByEntityHandler();
+				ManufacturerImportByEntityHandler productsImport = new ManufacturerImportByEntityHandler();
 				productsImport.dataProducerExecutor();
 			}
 		} catch (Exception e) {
@@ -94,10 +88,10 @@ public class ProductImportByEntityHandler {
 		String sMethod = "dataProducerExecutor";
 		loggerDebugM(sMethod, "start");
 		try {
-			ProductsRequestEntityData products = new ProductsRequestEntityData();
-			ProductRequestEntityProducer producer = new ProductRequestEntityProducer();
+			ManufacturersRequestEntityData products = new ManufacturersRequestEntityData();
+			ManufacturerRequestEntityProducer producer = new ManufacturerRequestEntityProducer();
 			producer.createRecord(products);
-			ProductRequestEntityWriter writerHandler = new ProductRequestEntityWriter();
+			ManufacturerRequestEntityWriter writerHandler = new ManufacturerRequestEntityWriter();
 			String fn = getDebugJsonFileName("pi-4");
 			writerHandler.writeRecord(products, 0, fn);
 			loggerDebugM(sMethod, "end");
@@ -111,10 +105,10 @@ public class ProductImportByEntityHandler {
 		loggerDebugM(sMethod, "start");
 		try {
 			String ibd = getImgBaseDir();
-			ProductImportByEntityHandler productsImport = new ProductImportByEntityHandler();
+			ManufacturerImportByEntityHandler productsImport = new ManufacturerImportByEntityHandler();
 			String fn = getDebugJsonFileName("ld-4");
 
-			productsImport.importProducts(DRY_RUN, endPoint, MERCHANT, fn, ibd, IMAGE_EXT, 1);
+			productsImport.importManufacturers(DRY_RUN, endPoint, MERCHANT, fn, ibd, IMAGE_EXT, 1);
 		} catch (Exception ex) {
 			loggerExceptionM(sMethod, "end", ex);
 		}
@@ -126,10 +120,10 @@ public class ProductImportByEntityHandler {
 
 		try {
 			String fn = getImportJsonFileName("ld-4");
-			ProductRequestEntityReader entityReader = new ProductRequestEntityReader();
-			ProductsRequestEntityData entities = entityReader.readEntityRecordFromJsonFile(fn);
+			ManufacturerRequestEntityReader entityReader = new ManufacturerRequestEntityReader();
+			ManufacturersRequestEntityData entities = entityReader.readEntityRecordFromJsonFile(fn);
 
-			ProductRequestEntityWriter writerHandler = new ProductRequestEntityWriter();
+			ManufacturerRequestEntityWriter writerHandler = new ManufacturerRequestEntityWriter();
 			String json = writerHandler.getRecordAsJsonString(entities);
 			loggerDebugM(sMethod, "json:" + json);
 			String fnwrtite = getDebugJsonFileName("test-ld-4");
@@ -142,58 +136,35 @@ public class ProductImportByEntityHandler {
 		}
 	}
 
-	public void imagesDbgCheck() {
-		String sMethod = "imagesDbgCheck";
-		loggerDebugM(sMethod, "start");
-
-		try {
-			ProductImportImageByMapService productsImport = new ProductImportImageByMapService();
-			String ibd = getImgBaseDir();
-			productsImport.handleCheckImages(ibd, "img_2", IMAGE_EXT);
-		} catch (Exception ex) {
-			loggerExceptionM(sMethod, "end", ex);
-		}
-		loggerDebugM(sMethod, "end");
-	}
 	private String getItemSelector() {
 		return "-S1";
 	}
-	public void importProducts(boolean dryRun, String endpoint, String merchant, String fileName, String imgBaseDir,
+	
+	public void importManufacturers(boolean dryRun, String endpoint, String merchant, String fileName, String imgBaseDir,
 			String imgExt, int importType) throws Exception {
 
-		String sMethod = "importProducts";
+		String sMethod = "importManufacturers";
 		loggerDebugM(sMethod, "start");
 		String fn = fileName;
-		ProductRequestEntityReader entityReader = new ProductRequestEntityReader();
-		ProductsRequestEntityData entityData = entityReader.readEntityRecordFromJsonFile(fn);
+		ManufacturerRequestEntityReader entityReader = new ManufacturerRequestEntityReader();
+		ManufacturersRequestEntityData entityData = entityReader.readEntityRecordFromJsonFile(fn);
 		
 		
 		if (entityData == null) {
 			loggerDebugM(sMethod, "end");
 			return;
 		}
-		List<ProductRequestEntityData> products = entityData.getProductItems();
-		updateSku(products);
-		handleImportProducts(dryRun, endpoint, merchant, fileName, imgBaseDir, imgExt, entityData);
+		List<ManufacturerRequestEntityData> products = entityData.getManufacturerItems();
+		handleImportManufacturers(dryRun, endpoint, merchant, fileName, imgBaseDir, imgExt, entityData);
 
 		loggerDebugM(sMethod, "end");
 	}
 	
-	public void updateSku(List<ProductRequestEntityData> products) throws Exception {
 
-		String sMethod = "updateSku";
-		loggerDebugM(sMethod, "start");
-		for(ProductRequestEntityData product : products) {
-			product.setBarcode(product.getBarcode() + getItemSelector());
-			product.setSku(product.getSku() + getItemSelector());
-		}		
-		loggerDebugM(sMethod, "end");
-	}
+	public void handleImportManufacturers(boolean dryRun, String endpoint, String merchant, String fileName,
+			String imgBaseDir, String imgExt, ManufacturersRequestEntityData entitiesData) throws Exception {
 
-	public void handleImportProducts(boolean dryRun, String endpoint, String merchant, String fileName,
-			String imgBaseDir, String imgExt, ProductsRequestEntityData entitiesData) throws Exception {
-
-		String sMethod = "handleImportProducts";
+		String sMethod = "handleImportManufacturers";
 		loggerDebugM(sMethod, "start");
 
 		int ii = 0;
@@ -203,7 +174,7 @@ public class ProductImportByEntityHandler {
 			return;
 		}
 
-		for (ProductRequestEntityData entityData : entitiesData.getProductItems()) {
+		for (ManufacturerRequestEntityData entityData : entitiesData.getManufacturerItems()) {
 			loggerDebugM(sMethod, "start-record:" + ii);
 			boolean isOk = handleMappedRecord(entityData, ii, dryRun, endpoint, merchant, fileName, imgBaseDir, imgExt);
 			if (isOk) {
@@ -215,18 +186,18 @@ public class ProductImportByEntityHandler {
 		}
 
 		loggerDebug("------------------------------------");
-		loggerDebug("Product import done " + count + " Dry Run [" + DRY_RUN + "]");
+		loggerDebug("Manufacturer import done " + count + " Dry Run [" + DRY_RUN + "]");
 		loggerDebug("------------------------------------");
 		loggerDebugM(sMethod, "end");
 	}
 
-	public boolean handleMappedRecord(ProductRequestEntityData entityData, int ii, boolean dryRun, String endpoint,
+	public boolean handleMappedRecord(ManufacturerRequestEntityData entityData, int ii, boolean dryRun, String endpoint,
 			String merchant, String fileName, String imgBaseDir, String imgExt) {
 
 		String sMethod = "handleMappedRecord";
 		loggerDebugM(sMethod, "start");
 		try {
-			ProductImportManagerByEntityService pis = new ProductImportManagerByEntityService();
+			ManufacturerImportManagerByEntityService pis = new ManufacturerImportManagerByEntityService();
 
 			loggerDebugM(sMethod, "start-record:" + ii);
 			PersistableProduct product = new PersistableProduct();
@@ -239,7 +210,7 @@ public class ProductImportByEntityHandler {
 
 			// debugRecord(record, product, ii);
 
-			ProductImportByEntityController pic = new ProductImportByEntityController();
+			ManufacturerImportByEntityController pic = new ManufacturerImportByEntityController();
 			pic.sendRecord(entityData, product, ii, dryRun, endpoint + merchant);
 			boolean isOkCount = handleMaxCount(entityData, product, ii);
 			if (!isOkCount) {
@@ -255,7 +226,7 @@ public class ProductImportByEntityHandler {
 		}
 	}
 
-	public boolean handleMaxCount(ProductRequestEntityData record, PersistableProduct product, int ii) {
+	public boolean handleMaxCount(ManufacturerRequestEntityData record, PersistableProduct product, int ii) {
 		String sMethod = "handleRecord";
 		loggerDebugM(sMethod, "start");
 		try {
@@ -273,7 +244,7 @@ public class ProductImportByEntityHandler {
 	}
 
 	private String getDbgClassName() {
-		return "ProductFileManagerImpl::";
+		return "ManufacturerFileManagerImpl::";
 	}
 
 	private void loggerDebug(String ttx) {

@@ -11,8 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.salesmanager.shop.model.catalog.product.PersistableProduct;
-import com.shopizer.inventory.csv.in.product.model.ProductRequestEntityData;
-import com.shopizer.inventory.csv.in.product.model.ProductsRequestEntityData;
+import com.shopizer.inventory.entity.in.product.model.ProductRequestEntityData;
+import com.shopizer.inventory.entity.in.product.model.ProductsRequestEntityData;
 import com.shopizer.inventory.entity.in.product.services.ProductImportByEntityHandler;
 
 public class ProductRequestCsv2EntityMapper {

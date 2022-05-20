@@ -1,4 +1,4 @@
-package com.shopizer.inventory.entity.in.product.services;
+package com.shopizer.inventory.entity.in.manuf.services;
 
 import java.nio.charset.Charset;
 
@@ -15,14 +15,13 @@ import org.springframework.security.crypto.codec.Base64;
 import org.springframework.web.client.RestTemplate;
 
 import com.salesmanager.shop.model.catalog.product.PersistableProduct;
-import com.shopizer.inventory.entity.in.product.model.ProductRequestEntityData;
-import com.shopizer.inventory.entity.in.product.model.ProductRequestMapData;
+import com.shopizer.inventory.entity.in.manuf.model.ManufacturerRequestEntityData;
 
 
 
-public class ProductImportByEntityController {
+public class ManufacturerImportByEntityController {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(ProductImportByEntityController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ManufacturerImportByEntityController.class);
 	
 	public boolean debugRecord(CSVRecord record,PersistableProduct product,int ii) {
 		String sMethod = "debugRecord";
@@ -42,7 +41,7 @@ public class ProductImportByEntityController {
 		}
 	}
 	
-	public boolean sendRecord(ProductRequestEntityData record ,PersistableProduct product,int ii,boolean dryRun,String uri) {
+	public boolean sendRecord(ManufacturerRequestEntityData record ,PersistableProduct product,int ii,boolean dryRun,String uri) {
 		String sMethod = "sendRecord";
 		loggerDebugM(sMethod, "start");
 		try {

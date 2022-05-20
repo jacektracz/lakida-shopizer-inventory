@@ -1,4 +1,4 @@
-package com.shopizer.inventory.entity.in.product.services;
+package com.shopizer.inventory.entity.in.manuf.services;
 
 import java.io.FileInputStream;
 
@@ -6,24 +6,26 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.shopizer.inventory.entity.in.product.model.ProductsRequestEntityData;
+import com.shopizer.inventory.entity.in.manuf.model.ManufacturersRequestEntityData;
 
-public class ProductRequestEntityReader {
+
+
+public class ManufacturerRequestEntityReader {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(ProductRequestEntityReader.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ManufacturerRequestEntityReader.class);
 	
 	private String getDbgClassName() {
-		return "ProductRequestEntityReader::";
+		return "ManufacturerRequestEntityReader::";
 	}
 	
-	public ProductsRequestEntityData readEntityRecordFromJsonFile(String fileName) {
+	public ManufacturersRequestEntityData readEntityRecordFromJsonFile(String fileName) {
 		String sMethod = "readEntityRecordFromJsonFile";
 		loggerDebugM(sMethod, "start");
 		try {
 			loggerDebugM(sMethod, "file-name:" + fileName);	
 			ObjectMapper mapper = new ObjectMapper();
-			ProductsRequestEntityData mp = mapper.readValue(new FileInputStream(fileName),
-					ProductsRequestEntityData.class);
+			ManufacturersRequestEntityData mp = mapper.readValue(new FileInputStream(fileName),
+					ManufacturersRequestEntityData.class);
 			return mp;
 		} catch (Exception ex) {
 			loggerExceptionM(sMethod, "end", ex);

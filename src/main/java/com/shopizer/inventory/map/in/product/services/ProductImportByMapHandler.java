@@ -10,10 +10,10 @@ import org.slf4j.LoggerFactory;
 import com.salesmanager.shop.model.catalog.product.PersistableProduct;
 import com.shopizer.inventory.csv.in.product.mapper.ProductRequesEntity2MapMapper;
 import com.shopizer.inventory.csv.in.product.mapper.ProductRequestCsv2EntityMapper;
-import com.shopizer.inventory.csv.in.product.model.ProductRequestEntityData;
-import com.shopizer.inventory.csv.in.product.model.ProductRequestMapData;
-import com.shopizer.inventory.csv.in.product.model.ProductsRequestEntityData;
-import com.shopizer.inventory.csv.in.product.model.ProductsRequestMapData;
+import com.shopizer.inventory.entity.in.product.model.ProductRequestEntityData;
+import com.shopizer.inventory.entity.in.product.model.ProductRequestMapData;
+import com.shopizer.inventory.entity.in.product.model.ProductsRequestEntityData;
+import com.shopizer.inventory.entity.in.product.model.ProductsRequestMapData;
 import com.shopizer.inventory.map.in.product.services.ProductImportImageByMapService;
 
 public class ProductImportByMapHandler {

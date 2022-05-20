@@ -15,7 +15,7 @@ import org.springframework.security.crypto.codec.Base64;
 import org.springframework.web.client.RestTemplate;
 
 import com.salesmanager.shop.model.catalog.product.PersistableProduct;
-import com.shopizer.inventory.csv.in.product.model.ProductRequestMapData;
+import com.shopizer.inventory.entity.in.product.model.ProductRequestMapData;
 
 
 

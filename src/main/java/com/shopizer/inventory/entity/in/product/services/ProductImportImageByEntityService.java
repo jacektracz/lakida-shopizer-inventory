@@ -16,8 +16,8 @@ import org.slf4j.LoggerFactory;
 
 import com.salesmanager.shop.model.catalog.product.PersistableImage;
 import com.salesmanager.shop.model.catalog.product.PersistableProduct;
-import com.shopizer.inventory.csv.in.product.model.ProductRequestEntityData;
-import com.shopizer.inventory.csv.in.product.model.ProductRequestImageData;
+import com.shopizer.inventory.entity.in.product.model.ProductRequestEntityData;
+import com.shopizer.inventory.entity.in.product.model.ProductRequestImageData;
 
 public class ProductImportImageByEntityService {
 

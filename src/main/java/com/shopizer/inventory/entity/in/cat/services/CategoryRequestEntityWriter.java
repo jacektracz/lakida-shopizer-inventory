@@ -1,4 +1,4 @@
-package com.shopizer.inventory.entity.in.product.services;
+package com.shopizer.inventory.entity.in.cat.services;
 
 import java.io.FileWriter;
 import java.io.PrintWriter;
@@ -8,18 +8,19 @@ import org.codehaus.jackson.map.ObjectWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.shopizer.inventory.entity.in.product.model.ProductsRequestEntityData;
+import com.shopizer.inventory.entity.in.cat.model.CategoriesRequestEntityData;
 
-public class ProductRequestEntityWriter {
+
+public class CategoryRequestEntityWriter {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(ProductRequestEntityWriter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(CategoryRequestEntityWriter.class);
 	
 	private String getDbgClassName() {
-		return "ProductRequestEntityWriter::";
+		return "CategoryRequestEntityWriter::";
 	}
 	
 	
-	public boolean debugRecord(ProductsRequestEntityData product,int ii,String outputFile) {
+	public boolean debugRecord(CategoriesRequestEntityData product,int ii,String outputFile) {
 		String sMethod = "debugRecord";
 		loggerDebugM(sMethod, "start");
 		try {
@@ -38,7 +39,7 @@ public class ProductRequestEntityWriter {
 		}
 	}
 	
-	public boolean writeRecord(ProductsRequestEntityData product,int ii,String outputFile) {
+	public boolean writeRecord(CategoriesRequestEntityData product,int ii,String outputFile) {
 		String sMethod = "writeRecord";
 		loggerDebugM(sMethod, "start");
 		
@@ -68,7 +69,7 @@ public class ProductRequestEntityWriter {
 		
 	}
 
-	public String getRecordAsJsonString(ProductsRequestEntityData product) {
+	public String getRecordAsJsonString(CategoriesRequestEntityData product) {
 		String sMethod = "getRecordAsJsonString";
 		loggerDebugM(sMethod, "start");
 		String json = "";

@@ -3,19 +3,16 @@ package com.shopizer.inventory.entity.in.product.services;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.shopizer.inventory.csv.in.product.model.ProductRequestEntityData;
-import com.shopizer.inventory.csv.in.product.model.ProductRequestImageData;
-import com.shopizer.inventory.csv.in.product.model.ProductRequestOptionData;
-import com.shopizer.inventory.csv.in.product.model.ProductRequestOptionsGroupData;
-import com.shopizer.inventory.csv.in.product.model.ProductsRequestEntityData;
+import com.shopizer.inventory.entity.in.product.model.ProductRequestEntityData;
+import com.shopizer.inventory.entity.in.product.model.ProductRequestImageData;
+import com.shopizer.inventory.entity.in.product.model.ProductRequestOptionData;
+import com.shopizer.inventory.entity.in.product.model.ProductRequestOptionsGroupData;
+import com.shopizer.inventory.entity.in.product.model.ProductsRequestEntityData;
 
 public class ProductRequestEntityProducer {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProductRequestEntityProducer.class);
 	
-	private String getDbgClassName() {
-		return "ProductRequestEntityProducer::";
-	}
 	
 	
 	public boolean createRecord(ProductsRequestEntityData products) {
@@ -159,7 +156,11 @@ public class ProductRequestEntityProducer {
 			loggerExceptionM(sMethod, "end",ex);
 			return false;
 		}
-	}	
+	}
+	
+	private String getDbgClassName() {
+		return "ProductRequestEntityProducer::";
+	}
 	
 	private void loggerDebug(String ttx) {
 		String stx = getDbgClassName() + ttx;

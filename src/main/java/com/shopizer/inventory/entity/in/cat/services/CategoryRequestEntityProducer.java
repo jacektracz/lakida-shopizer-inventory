@@ -1,0 +1,64 @@
+package com.shopizer.inventory.entity.in.cat.services;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.shopizer.inventory.entity.in.cat.model.CategoryRequestEntityData;
+import com.shopizer.inventory.entity.in.cat.model.CategoriesRequestEntityData;
+
+
+public class CategoryRequestEntityProducer {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(CategoryRequestEntityProducer.class);
+	
+	
+	
+	public boolean createRecord(CategoriesRequestEntityData products) {
+		String sMethod = "createRecord";
+		loggerDebugM(sMethod, "start");
+		try {
+			
+			CategoryRequestEntityData product = new CategoryRequestEntityData();
+			createRecordMainData(product);
+			products.getCategoryItems().add(product);
+			loggerDebugM(sMethod, "end");
+			return true;
+		}catch(Exception ex) {
+			loggerExceptionM(sMethod, "end",ex);
+			return false;
+		}
+	}
+	
+	public boolean createRecordMainData(CategoryRequestEntityData product) {
+		String sMethod = "createRecordMainData";
+		loggerDebugM(sMethod, "start");
+		try {
+			
+			loggerDebugM(sMethod, "end");
+			return true;
+		}catch(Exception ex) {
+			loggerExceptionM(sMethod, "end",ex);
+			return false;
+		}
+	}
+	
+	private String getDbgClassName() {
+		return "CategoryRequestEntityProducer::";
+	}
+	
+	private void loggerDebug(String ttx) {
+		String stx = getDbgClassName() + ttx;
+		LOGGER.debug(stx);
+	}
+
+	private void loggerDebugM(String sMethod, String ttx) {
+		String stx = getDbgClassName() + ":" + sMethod + ":" + ttx;
+		LOGGER.debug(stx);
+	}
+
+	private void loggerExceptionM(String sMethod, String ttx, Exception ex) {
+		String stx = getDbgClassName() + ":" + sMethod + ":" + ttx;
+		LOGGER.debug(stx);
+		LOGGER.error(ex.getMessage());
+	}	
+}

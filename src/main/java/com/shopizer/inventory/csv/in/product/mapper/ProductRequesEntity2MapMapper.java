@@ -3,10 +3,10 @@ package com.shopizer.inventory.csv.in.product.mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.shopizer.inventory.csv.in.product.model.ProductRequestEntityData;
-import com.shopizer.inventory.csv.in.product.model.ProductRequestMapData;
-import com.shopizer.inventory.csv.in.product.model.ProductsRequestEntityData;
-import com.shopizer.inventory.csv.in.product.model.ProductsRequestMapData;
+import com.shopizer.inventory.entity.in.product.model.ProductRequestEntityData;
+import com.shopizer.inventory.entity.in.product.model.ProductRequestMapData;
+import com.shopizer.inventory.entity.in.product.model.ProductsRequestEntityData;
+import com.shopizer.inventory.entity.in.product.model.ProductsRequestMapData;
 
 public class ProductRequesEntity2MapMapper {
 	

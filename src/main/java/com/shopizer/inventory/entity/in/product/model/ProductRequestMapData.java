@@ -1,4 +1,4 @@
-package com.shopizer.inventory.csv.in.product.model;
+package com.shopizer.inventory.entity.in.product.model;
 
 import java.util.HashMap;
 import java.util.Map;

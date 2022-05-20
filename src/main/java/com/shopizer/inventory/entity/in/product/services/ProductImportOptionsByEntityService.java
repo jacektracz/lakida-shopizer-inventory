@@ -32,10 +32,10 @@ import com.salesmanager.shop.model.catalog.product.attribute.PersistableProductA
 import com.salesmanager.shop.model.catalog.product.attribute.PersistableProductOption;
 import com.salesmanager.shop.model.catalog.product.attribute.PersistableProductOptionValue;
 import com.salesmanager.shop.model.catalog.product.attribute.ProductOptionValue;
-import com.shopizer.inventory.csv.in.product.model.ProductRequestEntityData;
-import com.shopizer.inventory.csv.in.product.model.ProductRequestMapData;
-import com.shopizer.inventory.csv.in.product.model.ProductRequestOptionData;
-import com.shopizer.inventory.csv.in.product.model.ProductRequestOptionsGroupData;
+import com.shopizer.inventory.entity.in.product.model.ProductRequestEntityData;
+import com.shopizer.inventory.entity.in.product.model.ProductRequestMapData;
+import com.shopizer.inventory.entity.in.product.model.ProductRequestOptionData;
+import com.shopizer.inventory.entity.in.product.model.ProductRequestOptionsGroupData;
 
 public class ProductImportOptionsByEntityService {
 
