@@ -22,24 +22,13 @@ public class ProductImportByEntityHandler {
 	/**
 	 * where to find csv
 	 */
-	private static String getImportFileBaseDir() {
-		int ii = 0;
-		String sF = "";
-		if (ii == 0) {
-			sF = sF + "C://lkd//ht//apps_java8_in_action//app//src//";
-			sF = sF + "shopizer-inventory-csv//src//main//resources//";
-			sF = sF + "data-import//product//product-json//";
-			sF = sF + "";
-			sF = sF + "";
-		}
-		return sF;
-	}
+	
 
 	private static String getDebugJsonFileName(String idx) {
 		int ii = 0;
 		String sF = "";
 		if (ii == 0) {
-			sF = getImportFileBaseDir() + "product-loader-" + idx + ".json";
+			sF = ProductImportSettings.getImportFileBaseDir() + "product-loader-" + idx + ".json";
 		}
 		return sF;
 	}
@@ -48,7 +37,7 @@ public class ProductImportByEntityHandler {
 		int ii = 0;
 		String sF = "";
 		if (ii == 0) {
-			sF = getImportFileBaseDir() + "product-loader-" + idx + ".json";
+			sF = ProductImportSettings.getImportFileBaseDir() + "product-loader-" + idx + ".json";
 		}
 		return sF;
 	}

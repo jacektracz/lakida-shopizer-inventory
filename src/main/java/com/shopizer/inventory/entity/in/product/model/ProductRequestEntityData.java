@@ -3,6 +3,9 @@ package com.shopizer.inventory.entity.in.product.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.shopizer.inventory.entity.in.cat.model.CategoriesRequestEntityData;
+import com.shopizer.inventory.entity.in.prodtype.model.ProductTypesRequestEntityData;
+
 public class ProductRequestEntityData {
 
 	private String barcode;
@@ -14,6 +17,7 @@ public class ProductRequestEntityData {
 	private String quantity;
 	private String manufacturerCollection;
 	private String category;
+	private CategoriesRequestEntityData categories;
 	private String packageHeight;
 	private String packageWidth;
 	private String packageLength;
@@ -26,6 +30,7 @@ public class ProductRequestEntityData {
 	private String importStatus;
 	private String dimension;
 	private String productType;
+	private ProductTypesRequestEntityData types;
 	private List<ProductRequestImageData> images;
 	private List<ProductRequestOptionData> options;
 	private ProductRequestOptionsGroupData sizeOptions;
@@ -231,6 +236,25 @@ public class ProductRequestEntityData {
 
 	public void setProductType(String productType) {
 		this.productType = productType;
+	}
+
+	public CategoriesRequestEntityData getCategories() {
+		if(categories == null) {
+			categories = new CategoriesRequestEntityData();
+		}
+		return categories;
+	}
+
+	public void setCategories(CategoriesRequestEntityData categories) {
+		this.categories = categories;
+	}
+
+	public ProductTypesRequestEntityData getTypes() {
+		return types;
+	}
+
+	public void setTypes(ProductTypesRequestEntityData types) {
+		this.types = types;
 	}
 
 }

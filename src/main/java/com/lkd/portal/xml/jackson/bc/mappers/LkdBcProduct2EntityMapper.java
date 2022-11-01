@@ -2,6 +2,8 @@ package com.lkd.portal.xml.jackson.bc.mappers;
 
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -13,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import com.lkd.portal.xml.jackson.bc.model.LkdBcOffer;
 import com.lkd.portal.xml.jackson.bc.model.LkdBcOffers;
 import com.salesmanager.shop.model.catalog.product.PersistableProduct;
+import com.shopizer.inventory.entity.in.cat.model.CategoryRequestEntityData;
 import com.shopizer.inventory.entity.in.product.model.ProductRequestEntityData;
 import com.shopizer.inventory.entity.in.product.model.ProductRequestImageData;
 import com.shopizer.inventory.entity.in.product.model.ProductsRequestEntityData;
@@ -45,6 +48,8 @@ public class LkdBcProduct2EntityMapper {
 		
 		dest.setBarcode(parser.getId());
 		dest.setCategory(parser.getCategory());
+		CategoryRequestEntityData catDt =  new CategoryRequestEntityData();
+		dest.getCategories().getCategoryItems().add(catDt);
 		dest.setDeal(parser.getId());
 		dest.setDescriptionEn(parser.getDescription());
 		dest.setDimension("1");
@@ -76,6 +81,34 @@ public class LkdBcProduct2EntityMapper {
 		loggerDebugM(sMethod, "start");
 	}
 	
+	private String getClearName(String text) {
+		Map<Character, Character> map = new HashMap<Character, Character>();
+	    map.put('é', 'e');
+	    map.put('î', 'i');
+	    map.put('è', 'e');
+	    map.put('ą', 'a');
+	    map.put('ę', 'e');
+	    map.put('ć', 'c');
+	    map.put('ó', 'o');
+	    map.put('ż', 'z');
+	    map.put('ż', 'z');
+	    map.put(' ', '-');
+
+	    StringBuilder b = new StringBuilder();
+	    for (char c : text.toCharArray())
+	    {
+	        if (map.containsKey(c))
+	        {
+	            b.append(map.get(c));
+	        }
+	        else
+	        {
+	            b.append(c);
+	        }
+	    }
+	    String result = b.toString();	
+	    return result;
+	}
 	
 	private String getDbgClassName() {
 		return "ProductRequestMapper::";
